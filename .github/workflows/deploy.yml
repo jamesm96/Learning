@@ -30,6 +30,7 @@ jobs:
 
       - run: npm ci
       - run: npm test
+      - run: npm run check:contrast
 
       # Pages serves the site from /<repo-name>/, so tell Vite that.
       - run: npm run build

@@ -13,7 +13,8 @@
     "e2e": "playwright test",
     "icons": "node scripts/make-icons.mjs",
     "check:content": "node scripts/check-content.ts",
-    "postinstall": "node scripts/copy-pyodide.mjs"
+    "postinstall": "node scripts/copy-pyodide.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs"
   },
   "dependencies": {
     "@codemirror/commands": "6.11.1",
