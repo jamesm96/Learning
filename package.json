@@ -1,0 +1,27 @@
+{
+  "name": "code-literacy",
+  "private": true,
+  "version": "0.0.1",
+  "description": "A phone-first app for learning to read, judge and debug code.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "playwright test",
+    "icons": "node scripts/make-icons.mjs"
+  },
+  "dependencies": {
+    "preact": "10.29.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@preact/preset-vite": "2.10.6",
+    "typescript": "6.0.3",
+    "vite": "8.3.5",
+    "vite-plugin-pwa": "2.0.0",
+    "vitest": "5.1.0"
+  }
+}
