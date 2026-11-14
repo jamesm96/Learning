@@ -38,6 +38,18 @@ export default defineConfig({
       workbox: {
         // Precache the whole app shell so it opens offline after the first visit.
         globPatterns: ["**/*.{js,css,html,svg,png,woff2,webmanifest}"],
+        // Python (about 10 MB) is not part of install. It is cached the first time you press Run.
+        globIgnores: ["pyodide/**"],
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.includes("/pyodide/"),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "pyodide",
+              cacheableResponse: { statuses: [200] },
+            },
+          },
+        ],
       },
     }),
   ],
