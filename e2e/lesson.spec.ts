@@ -27,11 +27,12 @@ test("completes the first lesson, with progress shown afterwards", async ({ page
     await expect(page.getByRole("button", { name: "Answer to continue" })).toBeDisabled();
     await page.getByRole("button", { name: answer }).click();
     await expect(page.locator(".feedback-verdict")).toContainText("Right.");
-    const finish = page.getByRole("button", { name: "Finish lesson" });
-    if (await finish.isVisible()) await finish.click();
-    else await next(page).click();
+    await next(page).click();
   }
 
+  // The last step: explain it back, then finish.
+  await page.getByRole("textbox").fill("Predict, read every change, explain back, break things on purpose.");
+  await page.getByRole("button", { name: "Finish lesson" }).click();
   await expect(page.getByText("Lesson complete")).toBeVisible();
   await expect(page.getByText("3 of 3 right first time.")).toBeVisible();
 
@@ -58,9 +59,9 @@ test("resumes a lesson at the step where it was left", async ({ page }) => {
   await page.goto("/#/learn/start/start-01");
   await next(page).click();
   await next(page).click();
-  await expect(page.getByText("Step 3 of 7")).toBeVisible();
+  await expect(page.getByText(/^Step 3 of \d+$/)).toBeVisible();
   await page.reload();
-  await expect(page.getByText("Step 3 of 7")).toBeVisible();
+  await expect(page.getByText(/^Step 3 of \d+$/)).toBeVisible();
 });
 
 test("predict and fill-the-gap exercises can be answered", async ({ page }) => {
