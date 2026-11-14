@@ -74,3 +74,17 @@ answer: errors
 explain: |
   When you broke it yourself, you know exactly what changed. Reading the error then teaches you what that message means. Later, when the same message appears in code you didn't write, you'll recognise it.
 ```
+
+---
+
+```exercise choice
+id: start-01-habit-explain
+question: At the end of a lesson you try to explain the idea in two sentences, and you stall halfway through the first. What is the best next step?
+options:
+  - { id: reread, text: "Reread the part you could not explain, then try again" }
+  - { id: next, text: "Move on, because you got most of it" }
+  - { id: ask, text: "Ask Claude to write the two sentences for you" }
+answer: reread
+explain: |
+  Stalling is useful information: it marks the exact point where your understanding runs out. Rereading that part and trying again turns a vague sense of "I followed it" into something you can use. Copying someone else's explanation skips the step that does the work.
+```

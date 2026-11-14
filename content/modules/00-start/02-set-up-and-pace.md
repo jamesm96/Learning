@@ -67,3 +67,23 @@ answer: twenty
 explain: |
   Brackets are worked out first, so `2 + 3` is 5, then `5 * 4` is 20. `print` shows the result of the expression, not the expression itself. To print the text, it would need quotes: `print("(2 + 3) * 4")`.
 ```
+
+---
+
+A shot of 100 frames at 24 frames per second. Predict all three lines.
+
+```exercise predict
+id: start-02-predict-frames
+code: |
+  frames = 100
+  fps = 24
+  print(frames / fps)
+  print(frames // fps)
+  print(96 / fps)
+output: |
+  4.166666666666667
+  4
+  4.0
+explain: |
+  `100 / 24` is a little over four seconds, and `/` shows all of it. `100 // 24` keeps only the whole seconds and drops the four frames left over. `96 / 24` divides exactly, but `/` still gives a float, so it prints `4.0`.
+```
