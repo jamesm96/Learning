@@ -2,23 +2,20 @@
 # or a "planned" module that appears on the course map but is not written yet.
 title: Code Literacy
 
+# Sample files in content/files/. They are written into the working folder before
+# every run, in lessons and in the Scratchpad, so file code really works.
+files:
+  - manifest.json
+  - assets.csv
+  - notes.txt
+  - products.csv
+  - sensors.csv
+
 modules:
   - folder: 00-start
   - folder: 01-data
   - folder: 02-structure
   - folder: 03-debugging
-  - planned:
-      id: git
-      label: Module 4
-      title: Git
-      summary: Undo, history and review.
-  - planned:
-      id: io
-      label: Module 5
-      title: Data in and out
-      summary: Files, formats and other programs.
-  - planned:
-      id: next
-      label: What next
-      title: Capstone and beyond
-      summary: One pipeline end to end, a schedule, and where this leads.
+  - folder: 04-git
+  - folder: 05-io
+  - folder: 06-next
