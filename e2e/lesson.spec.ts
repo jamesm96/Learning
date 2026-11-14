@@ -64,18 +64,21 @@ test("resumes a lesson at the step where it was left", async ({ page }) => {
 });
 
 test("predict and fill-the-gap exercises can be answered", async ({ page }) => {
+  test.setTimeout(90_000); // runs real Python
   await page.goto("/#/learn/start/start-02");
   await readUntilExercise(page);
-  await page.getByRole("button", { name: "Reveal output" }).click();
-  await expect(page.getByLabel("Output")).toContainText("Python is working.");
+  await page.getByRole("button", { name: "Predict in my head instead" }).click();
+  await page.getByRole("button", { name: "I have my prediction. Run it" }).click();
+  await expect(page.getByLabel("Output")).toContainText("Python is working.", { timeout: 45_000 });
   await page.getByRole("button", { name: "Yes, it matched" }).click();
   await expect(page.locator(".feedback-verdict")).toContainText("Right.");
 
   await page.goto("/#/learn/data/data-01");
   // Steps 1-6 hold reading, a predict, and two choices; answer each to reach the gap.
   await next(page).click();
-  await page.getByRole("button", { name: "Reveal output" }).click();
-  await page.getByRole("button", { name: "No" }).click();
+  await page.getByRole("button", { name: "Predict in my head instead" }).click();
+  await page.getByRole("button", { name: "I have my prediction. Run it" }).click();
+  await page.getByRole("button", { name: "No", exact: true }).click();
   await next(page).click();
   await next(page).click();
   await page.getByRole("button", { name: '"123"' }).click();
