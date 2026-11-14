@@ -3,6 +3,7 @@
 // The app imports only the TypeScript types (import type), so Zod never ships to the phone.
 
 import { z } from "zod";
+import { BLANK } from "./constants.ts";
 
 const id = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "ids use lowercase letters, digits and dashes");
 
@@ -53,9 +54,6 @@ export const clozeSource = z
   .refine((ex) => ex.blanks.every((blank) => blank.options.includes(blank.answer)), {
     message: "each blank's answer must be one of its options",
   });
-
-/** The marker for a gap in cloze code. */
-export const BLANK = "___";
 
 // ---- Exercises after the build has turned their Markdown into HTML ----
 // Fields ending in Html are trusted HTML produced at build time from our own content.
