@@ -172,7 +172,12 @@ pre {
 }
 
 .button-primary {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  padding: 0 16px;
   width: 100%;
   max-width: var(--column);
   margin: 0 auto;
@@ -208,34 +213,6 @@ pre {
 .placeholder-phase {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-}
-
-/* ---- Course map ---- */
-
-.module-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid var(--line);
-}
-
-.module-list li {
-  display: grid;
-  grid-template-columns: 2.25rem 1fr;
-  gap: 12px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.module-number {
-  font-family: var(--font-mono);
-  font-size: 1.125rem;
-  color: var(--accent);
-}
-
-.module-list p {
-  color: var(--muted);
-  font-size: 0.9375rem;
 }
 
 .app-version {
