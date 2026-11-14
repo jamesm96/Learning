@@ -1,0 +1,47 @@
+id: next
+label: What next
+title: Capstone and beyond
+summary: One pipeline end to end, a schedule, and where this leads.
+intro: |
+  The five modules are done when you can use them together. This last part gives you one project that does that, a schedule for the eight weeks, the topics worth learning next, and a checklist that tells you when you are code-literate.
+
+  It also looks further ahead. The same five skills run AI pipelines, synthetic data, digital twins and simulation, in games and well beyond them.
+
+lessons:
+  - 01-capstone.md
+  - 02-capstone-warm-up.md
+  - 03-eight-weeks.md
+  - 04-after-these-five.md
+  - 05-three-languages.md
+  - 06-code-literate.md
+
+apply:
+  - id: next-apply-blender
+    tier: In Blender
+    text: "Write the capstone's importer: the one module that imports `bpy` (or `unreal`). It takes a list of generated files and a manifest, and brings each result into the scene. Keep every rule and check out of it."
+  - id: next-apply-pipeline
+    tier: Pipeline
+    text: "Publish the capstone with a README that says what it does, how to install it, and how to run it on the example manifest. Ask someone else to follow the README without your help."
+  - id: next-apply-beyond
+    tier: Beyond games
+    text: "Run the same pipeline shape on data from another field: a CSV of products to photograph, or a list of warehouse scenes for synthetic training images. Change only the loading and the generation modules."
+
+prompts:
+  - title: "Review the capstone against the course"
+    text: |
+      Review this tool as a senior engineer would, against these checklists. Do not rewrite anything; list findings with the file and line.
+
+      Data: can you state the shape of every piece of data it handles? Where it uses .get() with a default, is a missing key normal there, or is it hiding a broken input? Are numbers from files converted before any maths?
+
+      Structure: can each function be described in one sentence with no "and"? Is any logic duplicated? Does only one module import the host application (bpy, unreal), and could everything else run with the host closed?
+
+      Debugging: is there any bare except or except Exception? When an item fails, does the report say which item and why?
+
+      Git: does the history read as a series of small, clear steps, and is anything committed that should not be, such as outputs or secrets?
+
+      Input and output: are paths built with pathlib rather than joined by hand? Does a batch report what was made, skipped and failed?
+
+      End with the three changes that would most improve it, in order.
+  - title: "Explain my own tool back to me"
+    text: |
+      I am going to walk an engineer through this tool. Ask me ten questions about it, one at a time, the way a sceptical senior engineer would: why it is structured this way, what happens when an input is broken, and what I would change next. Wait for my answer to each before asking the next, and tell me plainly where my answer was vague or wrong.
