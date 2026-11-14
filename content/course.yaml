@@ -21,6 +21,19 @@ selfTest:
   - { id: fifty-lines, text: "Write a fifty-line tool with no AI help: read a file, transform data, write a result" }
   - { id: walk-through, text: "Walk an engineer through one of your tools and answer their questions" }
 
+# Practice banks in content/practice/, shown on the Practice tab.
+practice:
+  drills:
+    - drills/data.md
+    - drills/structure.md
+    - drills/debugging.md
+    - drills/git.md
+    - drills/io.md
+  bugHunt:
+    - bug-hunt/easy.md
+    - bug-hunt/medium.md
+    - bug-hunt/hard.md
+
 modules:
   - folder: 00-start
   - folder: 01-data
