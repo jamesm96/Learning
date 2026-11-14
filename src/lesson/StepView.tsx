@@ -2,23 +2,30 @@ import type { Exercise, Step } from "../content/schema";
 import { Html } from "../components/Html";
 import { ChoiceView } from "../exercises/ChoiceView";
 import { ClozeView } from "../exercises/ClozeView";
+import { DiffView } from "../exercises/DiffView";
 import { EditView } from "../exercises/EditView";
 import { FixView } from "../exercises/FixView";
+import { GitView } from "../exercises/GitView";
+import { ParsonsView } from "../exercises/ParsonsView";
 import { PredictView } from "../exercises/PredictView";
+import { ShapeView } from "../exercises/ShapeView";
+import { SplitView } from "../exercises/SplitView";
 import { TracebackView } from "../exercises/TracebackView";
+import { ExplainBack } from "./ExplainBack";
 
 interface StepViewProps {
+  lessonId: string;
   step: Step;
   onAnswer: (exerciseId: string, correct: boolean) => void;
 }
 
-/** One step of a lesson: reading text, or an exercise with optional text above it. */
-export function StepView({ step, onAnswer }: StepViewProps) {
+/** One step of a lesson: reading text, an exercise with optional text above it, or "explain it back". */
+export function StepView({ lessonId, step, onAnswer }: StepViewProps) {
   if (step.kind === "read") {
     return <Html html={step.html} />;
   }
   if (step.kind === "explain") {
-    return <Html html={step.modelHtml} />; // replaced by the explain-it-back component later in this phase
+    return <ExplainBack lessonId={lessonId} modelHtml={step.modelHtml} />;
   }
   return (
     <>
@@ -48,5 +55,15 @@ function ExerciseView({ exercise, onAnswer }: ExerciseViewProps) {
       return <FixView exercise={exercise} onAnswer={onAnswer} />;
     case "traceback":
       return <TracebackView exercise={exercise} onAnswer={onAnswer} />;
+    case "shape":
+      return <ShapeView exercise={exercise} onAnswer={onAnswer} />;
+    case "parsons":
+      return <ParsonsView exercise={exercise} onAnswer={onAnswer} />;
+    case "split":
+      return <SplitView exercise={exercise} onAnswer={onAnswer} />;
+    case "diff":
+      return <DiffView exercise={exercise} onAnswer={onAnswer} />;
+    case "git":
+      return <GitView exercise={exercise} onAnswer={onAnswer} />;
   }
 }
