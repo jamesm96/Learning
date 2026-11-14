@@ -90,7 +90,7 @@ export function LessonPlayer({ module, lesson }: LessonPlayerProps) {
         onTouchEnd={swipe.onTouchEnd}
       >
         {index === 0 && <h1 class="player-title">{lesson.title}</h1>}
-        <StepView step={step} onAnswer={onAnswer} />
+        <StepView lessonId={lesson.id} step={step} onAnswer={onAnswer} />
       </article>
 
       <footer class="player-actions">
