@@ -109,7 +109,7 @@ One short entry per significant choice: what, why, and what was rejected.
 ## 24. A Git simulator, not real Git
 - **What:** `src/git/simulator.ts` models a working folder, staging, commits, branches, merges and the stash as plain data. Every command returns a new repository plus the text Git would print. It has unit tests, and every Git exercise's solution is replayed through it at build time.
 - **Why:** real Git cannot run on the phone, and a small model makes the three places (working folder, staging, history) visible after every command.
-- **Limits, on purpose:** no remote (`push`, `pull`); a merge that conflicts stops with an explanation; switching branches is refused when uncommitted edits would be overwritten, as Git does.
+- **Limits, on purpose:** no remote (`push`, `pull`); a merge that conflicts stops with an explanation; switching branches is refused when uncommitted edits would be overwritten, as Git does. It stages whole files, not parts of files, and refuses any merge while there are uncommitted edits (real Git only refuses when the merge touches those files).
 
 ## 25. Reorder lines uses tap-then-move, not drag
 - **What:** tap a line to pick it, then move it up or down and change its indent with four large buttons.
@@ -150,3 +150,20 @@ One short entry per significant choice: what, why, and what was rejected.
 
 ## 34. Settings live with progress
 - **What:** theme (follow the phone, light or dark) and haptics are stored in progress, so they are part of backups. Haptics use `navigator.vibrate`: one short tap for right, two for wrong. iPhones do not support it, and the Me tab says so.
+
+## 35. Practice banks reuse the lesson format
+- **What:** drills (`content/practice/drills/`, one file per topic) and the bug hunt (`content/practice/bug-hunt/`, one file per level) are written exactly like lessons, but every step is one exercise. The loader rejects reading steps there, and bug-hunt files may hold only `fix` exercises. The build checks them in Python like everything else.
+- **Why:** one format to learn, one validator, one set of exercise screens.
+- **Review:** drills and the bug hunt count towards your record but not towards spaced review, so a long practice session cannot flood tomorrow's queue.
+
+## 36. One session player for review, drills and the bug hunt
+- **What:** `CardSession` shows a fixed queue of cards one at a time and reports each card's first answer. Review, drills and the bug hunt only differ in how they build the queue and what they do with an answer.
+- **Why:** the three feel identical to use, and there is one component to fix or improve.
+
+## 37. Performance: measured, not guessed
+- **What:** `e2e/performance.spec.ts` loads the app cold on a throttled profile (150 ms round trips, 1.6 Mbps, CPU 4x slower, as Lighthouse's mobile default) and fails above 3 seconds. Measured at about 1.8 s and 190 KB at the end of phase 5, with all 327 exercises.
+- **Why:** the content is the biggest part of the download, but at half the budget, splitting it per module would add complexity for no visible gain. The test will say when that changes.
+
+## 38. Accessibility checks without a new dependency
+- **What:** `npm run check:contrast` computes WCAG contrast for every text colour pair in both themes (all at least 4.5:1; the light accent was darkened slightly to get there) and runs in CI. `e2e/accessibility.spec.ts` checks every main screen and one of every exercise type at 360px: named buttons and links, labelled inputs and editors, a single main heading, a page language, and no sideways scroll.
+- **Rejected for now:** `@axe-core/playwright`, a fuller automated audit. It would be a new dependency, so it is offered rather than added.

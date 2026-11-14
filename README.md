@@ -7,7 +7,7 @@ It is a Progressive Web App: a website that installs to your home screen, opens
 full-screen like an app, and works offline. There are no accounts and no server.
 Your progress stays on your device.
 
-**Status:** phase 4. The whole course, plus daily habit: spaced review on the Today tab, a streak and daily goal, a bug journal, Apply task notes, the self-test, settings, and backup export and import on the Me tab.
+**Status:** complete (phase 5). 41 lessons and 327 exercises, including 84 drills and a 21-snippet bug hunt; spaced review, streaks, a bug journal and backups. Every runnable exercise is proved in Python on every build.
 
 ## Install it on your phone
 
@@ -43,6 +43,7 @@ so use the deployed site for that.
 | `npm test` | Run the unit tests (Vitest) |
 | `npm run e2e` | Run the end-to-end tests on emulated iPhone and Pixel (Playwright) |
 | `npm run check:content` | Check every lesson, and run every runnable exercise in real Python |
+| `npm run check:contrast` | Check text colour contrast in both themes (WCAG 4.5:1) |
 | `npm run icons` | Regenerate the PNG icons from `public/icons/icon.svg` |
 
 The first time you run `npm run e2e`, install the test browsers with
