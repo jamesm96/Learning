@@ -2,6 +2,8 @@
 id: data-04
 title: "Dictionaries: things by name"
 minutes: 7
+recap: |
+  A dictionary stores values under keys, so you look things up by name rather than position. Use square brackets when a missing key means something is broken, and `.get()` with a default only when missing is normal.
 ---
 
 A dictionary stores values under keys. Where a list answers "what is third?", a dictionary answers "what is the triangle count?".

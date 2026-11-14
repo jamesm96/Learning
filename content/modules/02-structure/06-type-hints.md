@@ -2,6 +2,8 @@
 id: structure-06
 title: "Type hints and docstrings: notes that pay rent"
 minutes: 7
+recap: |
+  Type hints say what goes into a function and what comes out, such as `-> dict | None`, and editors and checkers use them, but Python ignores them when the code runs. A one-line docstring says what the function does, and if that line needs several "and"s the function has too many jobs.
 ---
 
 ```python

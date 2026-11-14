@@ -20,7 +20,6 @@ check:
   - "Do the rules and maths import the host application (`bpy`, `unreal`), or are they kept separate?"
   - "Did it add a class, a base class or a \"manager\" for something used once? Ask for the simpler version."
   - "Do functions have type hints and a one-line docstring?"
-  - "A prompt for a structure review: *Review the structure of this file as a senior engineer would. List each function with a one-sentence purpose. Flag functions doing more than one job, duplicated logic, and anything that could be tested without the host application if it were moved. Do not rewrite anything yet.*"
 
 bridge: |
   In C# every function lives inside a class, types are mandatory, and each thing is marked `public` or `private` to say who may use it. The `Asset` class from lesson 5:
@@ -59,3 +58,11 @@ apply:
   - id: structure-apply-beyond
     tier: Beyond games
     text: "Write a small `naming.py` module with two or three pure functions that validate and build names for any kind of item (assets, product photos, document versions). Give each a type-hinted signature and a docstring."
+
+prompts:
+  - title: "Review the structure"
+    text: |
+      Review the structure of this file as a senior engineer would. List each function with a one-sentence purpose. Flag functions doing more than one job, duplicated logic, and anything that could be tested without the host application if it were moved. Do not rewrite anything yet.
+  - title: "Keep the host at the edge"
+    text: |
+      I want every rule and calculation in this tool to run without the host application (Blender, Unreal or ComfyUI). Propose a split into files where only one file imports the host's API. For each function, say which file it would go in and why. Show the plan only; do not move any code yet.

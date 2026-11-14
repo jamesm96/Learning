@@ -2,6 +2,8 @@
 id: structure-05
 title: "Classes: data and behaviour together"
 minutes: 8
+recap: |
+  A class bundles data with the methods that use it: `__init__` sets up each object, and each method reaches that object's data through `self`. Use one when many things of one kind each carry their own state or the host requires it, a dataclass when it mostly holds data, and a plain function or dict otherwise.
 ---
 
 A class is a template for things that carry their own data and can do things with it.
@@ -109,6 +111,30 @@ cause:
   answer: self
 explain: |
   Inside a method, a bare `limit` is looked up as a local or global name, and there is none. The value was stored on the object, so it is reached through `self`. In C# the `this.` is often implied; in Python it never is.
+```
+
+---
+
+Assemble a small class. The two lines inside `__init__` can go in either order.
+
+```exercise parsons
+id: structure-05-parsons-sensor
+prompt: Build a `Sensor` class whose `is_alarm` method says whether a reading is above that sensor's limit.
+code: |
+  class Sensor:
+      def __init__(self, name, limit):
+          self.name = name
+          self.limit = limit
+
+      def is_alarm(self, value):
+          return value > self.limit
+check: |
+  bay = Sensor("bay_3", 30.0)
+  assert bay.name == "bay_3", "__init__ should store the name on self"
+  assert bay.is_alarm(35.5) is True, "35.5 is above the 30.0 limit, so it is an alarm"
+  assert bay.is_alarm(21.4) is False, "21.4 is below the limit, so it is not an alarm"
+explain: |
+  Both methods sit one level inside the class, and their bodies one level further. `__init__` stores the limit on `self`, and `is_alarm` reads it back through `self`, which is how each sensor keeps its own limit.
 ```
 
 ---

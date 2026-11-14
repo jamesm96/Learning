@@ -2,6 +2,8 @@
 id: start-02
 title: Set up once, and pace
 minutes: 4
+recap: |
+  The phone lessons need nothing installed, and desk sessions need Python, VS Code and Git, with every exercise committed from the start. Python works out maths in the usual order, and `/` always gives a float while `//` drops the remainder.
 ---
 
 ## Set up once

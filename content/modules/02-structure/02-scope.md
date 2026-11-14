@@ -2,6 +2,8 @@
 id: structure-02
 title: Scope, and why hidden state causes trouble
 minutes: 8
+recap: |
+  Names made inside a function are local to it, so it cannot disturb the rest of the program, and its own names vanish when it ends. Functions that use only their inputs are easy to test, and a changeable default like `[]` is shared by every call, so use `None` and build a fresh list inside.
 ---
 
 Names created inside a function exist only inside it. That region is the function's scope.
@@ -112,6 +114,27 @@ def tag(asset, tags=None):
 ```
 
 The same applies to a default `{}`. Numbers, strings and `None` are safe defaults, because they cannot be changed in place.
+
+---
+
+Rebuild the fixed version from memory. Watch the indent of the `append` line.
+
+```exercise parsons
+id: structure-02-parsons-none-default
+prompt: Order the lines so that each call to `tag` without a list gets a fresh one, and a list passed in is added to.
+code: |
+  def tag(asset, tags=None):
+      if tags is None:
+          tags = []
+      tags.append(asset)
+      return tags
+check: |
+  assert tag("rock") == ["rock"], "the first call with no list should return ['rock']"
+  assert tag("tree") == ["tree"], "a second call with no list should get its own fresh list"
+  assert tag("tree", ["rock"]) == ["rock", "tree"], "a list passed in should have the asset added to it"
+explain: |
+  Only `tags = []` belongs inside the `if`. If `append` were indented under it too, a list passed in by the caller would come back unchanged. The new list is made during the call, so no two calls share it.
+```
 
 ---
 

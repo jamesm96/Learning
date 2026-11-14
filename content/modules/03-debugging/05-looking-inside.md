@@ -2,6 +2,8 @@
 id: debugging-05
 title: Tools for looking inside
 minutes: 8
+recap: |
+  A labelled print such as `print(f"{price=}")` shows a value the way Python writes it, so text keeps its quotes, and logging gives each message a level so it can stay in the code. A debugger pauses on a breakpoint so you can see every variable, then step over or into each line.
 ---
 
 ## Print, with labels

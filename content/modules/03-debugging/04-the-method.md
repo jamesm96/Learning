@@ -2,6 +2,8 @@
 id: debugging-04
 title: The method
 minutes: 8
+recap: |
+  Debugging is a method: reproduce the bug with the smallest input, read the message, narrow it down by checking the data at a midpoint, and state a guess you can test. Change one thing per run, fix the cause rather than the symptom, then confirm with the failing case and one that used to work.
 ---
 
 ## Six steps, in order

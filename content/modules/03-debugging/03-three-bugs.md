@@ -2,6 +2,8 @@
 id: debugging-03
 title: Three bugs
 minutes: 8
+recap: |
+  Loud bugs, such as an off-by-one `IndexError` or a lookup that quietly returns `None`, are found by reading the traceback, and the best fix makes the mistake impossible or the failure loud. Silent wrong answers, such as replacing a total instead of adding to it, only show up when you know the right answer for a small example, which is what a test is.
 ---
 
 Three short bugs, each a different kind. For each one: read what Python tells you, name the cause, then fix it.

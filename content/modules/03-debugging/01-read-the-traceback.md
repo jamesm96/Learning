@@ -2,6 +2,8 @@
 id: debugging-01
 title: Read the traceback from the bottom
 minutes: 6
+recap: |
+  Read a traceback from the bottom: the last line says what went wrong, the entry above it says where, and the entries above that show how the program got there. The line that crashed is often correct code that received bad data, so the cause can be far from where the error appears.
 ---
 
 When Python fails it prints a traceback. It looks hostile and is in fact a precise report.

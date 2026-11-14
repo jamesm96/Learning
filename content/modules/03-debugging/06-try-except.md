@@ -2,6 +2,8 @@
 id: debugging-06
 title: try / except, used honestly
 minutes: 8
+recap: |
+  A `try` / `except` should catch one named error you expect, do something sensible with it, and let every other failure stop the program. `except Exception: pass` hides real bugs, so a batch that keeps going should record which item failed and why, and report it at the end.
 ---
 
 `try` runs code that might fail. `except` says what to do for one specific kind of failure.

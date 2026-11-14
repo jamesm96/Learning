@@ -2,6 +2,8 @@
 id: data-01
 title: Values, names and types
 minutes: 6
+recap: |
+  Every value has a type, such as `str`, `int`, `float`, `bool` or `None`, and the type decides what an operator does: `*` doubles a number but repeats a string. Numbers read from files arrive as text, so convert them with `int()` or `float()` before any maths.
 ---
 
 A variable is a name attached to a value. Every value has a type, and the type decides what you are allowed to do with it.

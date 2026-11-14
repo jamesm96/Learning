@@ -43,3 +43,8 @@ apply:
   - id: data-apply-beyond
     tier: Beyond games
     text: "Find the documented example reply for any web API (a weather service, a shop's product feed, an AI model). Describe its shape in a sentence and write the path to the one value a user would care about most."
+
+prompts:
+  - title: "Describe the data before the code"
+    text: |
+      Before changing anything, describe the shape of every piece of data this code reads or builds, one sentence each (for example: "a dict with a list of asset dicts under assets"). For each one, give the Python path to one typical value. Then list every place the code uses .get() with a default, and say whether a missing key is normal there or would hide a broken input. Do not rewrite anything yet.

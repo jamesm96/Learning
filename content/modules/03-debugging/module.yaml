@@ -47,3 +47,11 @@ apply:
   - id: debugging-apply-beyond
     tier: Beyond games
     text: "Start a bug journal: symptom, cause, how you found it. Ten entries. Patterns will appear, and it becomes interview material."
+
+prompts:
+  - title: "Ask for the cause before the fix"
+    text: |
+      Here is the full traceback and the function it points to. I expected X and got Y. Before proposing any change: explain the most likely cause, tell me what I could print or inspect to confirm it, and list any other causes that would produce the same error.
+  - title: "Review the error handling"
+    text: |
+      Review the error handling in this file. List every try/except with the exact errors it catches and what it does when it catches them. Flag any bare except or except Exception, any handler that hides a failure without telling anyone, and any .get() with a made-up default that could hide a broken input. For a batch, say whether every failure is reported with the item and the reason. Do not rewrite anything yet.

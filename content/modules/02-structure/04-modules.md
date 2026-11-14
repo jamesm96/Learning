@@ -2,6 +2,8 @@
 id: structure-04
 title: "Modules: files as building blocks"
 minutes: 8
+recap: |
+  Every `.py` file is a module, imported whole with `import json` or one name at a time with `from pathlib import Path`. Keep the host application, such as `bpy`, in one file at the edge, and guard `main()` with `if __name__ == "__main__":` so that importing a file does not run the tool.
 ---
 
 Every `.py` file is a module.

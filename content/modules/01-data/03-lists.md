@@ -2,6 +2,8 @@
 id: data-03
 title: "Lists: things in order"
 minutes: 7
+recap: |
+  A list keeps items in order from index 0; an index past the end raises `IndexError`, and a slice includes its start but stops before its end. A comprehension such as `[a for a in assets if test]` reads as: take each item, and keep it if the test passes.
 ---
 
 A list holds items in a fixed order. Counting starts at 0.

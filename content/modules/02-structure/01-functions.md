@@ -2,6 +2,8 @@
 id: structure-01
 title: "Functions: a named step with inputs and an output"
 minutes: 7
+recap: |
+  A function takes inputs through its parameters, which can have defaults and be passed by name, and hands back one value with `return`. Printing only shows a value to a person; a function with no `return` gives the rest of the program `None`.
 ---
 
 A function takes values in through its parameters and hands one back with `return`.
@@ -143,4 +145,30 @@ output: |
   sim_lab_003
 explain: |
   `{index:03d}` pads the number to three digits with zeros. The second call replaces the default prefix. The third passes everything by name, so the order no longer matters.
+```
+
+---
+
+Now put a function together. Order the lines and set the indents, so the function returns the SKUs of products below the stock threshold.
+
+```exercise parsons
+id: structure-01-parsons-low-stock
+prompt: Build `low_stock`, which returns the SKUs of products with stock below `threshold`.
+code: |
+  def low_stock(products, threshold=5):
+      low = []
+      for p in products:
+          if p["stock"] < threshold:
+              low.append(p["sku"])
+      return low
+check: |
+  shop = [
+      {"sku": "LAMP-01", "stock": 14},
+      {"sku": "RUG-07", "stock": 3},
+      {"sku": "CHAIR-OAK-120", "stock": 0},
+  ]
+  assert low_stock(shop) == ["RUG-07", "CHAIR-OAK-120"], "both the rug and the chair are below 5, so both SKUs should come back"
+  assert low_stock(shop, threshold=1) == ["CHAIR-OAK-120"], "with a threshold of 1, only the chair is low"
+explain: |
+  The empty list comes first, so there is something to add to. `return low` sits at the same indent as `for`, so it runs once, after the loop has seen every product. One level deeper and the function would hand back after the first product.
 ```

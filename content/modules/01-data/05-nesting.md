@@ -2,6 +2,8 @@
 id: data-05
 title: "Nesting: the shape of real data"
 minutes: 8
+recap: |
+  Real data is lists and dictionaries nested inside each other, so I say its shape in one sentence before I read code that uses it. I follow a path one step at a time, an index for each list and a key for each dict, as in `scene["assets"][2]["materials"][1]`.
 ---
 
 Real data is lists and dictionaries inside each other.
@@ -103,6 +105,29 @@ explain: |
 
 ---
 
+Now build a path yourself. Tap through the data one step at a time.
+
+```exercise shape
+id: data-05-shape-robot
+question: Find the wrist's upper angle limit.
+name: robot
+data: |
+  {
+    "robot": "arm_02",
+    "joints": [
+      {"name": "shoulder", "angle": 10.0,
+       "limits": {"min": -90, "max": 90}},
+      {"name": "wrist", "angle": -12.0,
+       "limits": {"min": -45, "max": 120}}
+    ]
+  }
+answer: 'robot["joints"][1]["limits"]["max"]'
+explain: |
+  `robot["joints"]` is a list, so the wrist needs an index: it is the second joint, `[1]`. That joint is a dict, so `["limits"]` is a key, and `limits` is another dict, so `["max"]` is a key too. Index for a list, key for a dict, at every step.
+```
+
+---
+
 ```exercise predict
 id: data-05-predict-workflow
 code: |
@@ -120,4 +145,34 @@ output: |
   2
 explain: |
   This is the shape of a ComfyUI workflow in API format, trimmed down. The node ids are strings, `"3"` and `"6"`, not numbers, so `workflow[3]` would raise a `KeyError`. `len` counts the top-level keys: two nodes.
+```
+
+---
+
+In a full ComfyUI workflow, a node's input can point at another node. `["6", 0]` means "output 0 of node 6".
+
+```exercise shape
+id: data-05-shape-workflow
+question: Which node does the sampler take its positive prompt from? Find the node id.
+name: workflow
+data: |
+  {
+    "3": {
+      "class_type": "KSampler",
+      "inputs": {"seed": 42, "steps": 20,
+                 "positive": ["6", 0],
+                 "negative": ["7", 0]}
+    },
+    "6": {
+      "class_type": "CLIPTextEncode",
+      "inputs": {"text": "a red crane"}
+    },
+    "7": {
+      "class_type": "CLIPTextEncode",
+      "inputs": {"text": "blurry"}
+    }
+  }
+answer: 'workflow["3"]["inputs"]["positive"][0]'
+explain: |
+  The sampler is node `"3"`. Its `"positive"` input is a list of two items, a node id and an output number, so `[0]` gives the id, `"6"`. That is how a workflow is wired: inputs hold links to other nodes, not the values themselves. To read the prompt text you would follow the link: `workflow["6"]["inputs"]["text"]`.
 ```

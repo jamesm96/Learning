@@ -2,6 +2,8 @@
 id: start-01
 title: How to use this
 minutes: 4
+recap: |
+  Writing code is getting cheap, so the skill worth training is judging whether code is right. I build it by predicting before I run, reading every changed line, explaining ideas back, and breaking examples on purpose to learn the errors.
 ---
 
 Writing code is getting cheap. Knowing whether code is right is getting more valuable.

@@ -2,6 +2,8 @@
 id: data-02
 title: "Strings: taking names apart"
 minutes: 6
+recap: |
+  `.split()` cuts a string into a list, and indexes such as `[0]` and `[-1]` pick out the parts, which may still need `int()` before maths. String methods never change a string in place, so keep the result under a name, and check that an f-string really has its `f`.
 ---
 
 Asset names, file names, product codes and prompts are all strings. Most tools spend their time splitting and rebuilding them.

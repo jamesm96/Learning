@@ -2,6 +2,8 @@
 id: data-06
 title: Three traps worth knowing early
 minutes: 8
+recap: |
+  Giving a list or dict a second name, or passing it to a function, shares the same object, so a change through one name shows through the other unless I `.copy()` it. Empty values, 0 and `None` all count as false, so I use `is None` when 0 or an empty string is a valid value.
 ---
 
 ## Trap 1: two names, one list

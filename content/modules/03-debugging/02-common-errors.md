@@ -2,6 +2,8 @@
 id: debugging-02
 title: The errors you will meet every week
 minutes: 8
+recap: |
+  Each common error points to a first check: for `KeyError` print the keys, for `IndexError` the length, for `TypeError` the value's type, and an `AttributeError` about `NoneType` means something returned `None` earlier. The last line of the message often quotes the bad value or suggests the fix, so read all of it.
 ---
 
 A handful of error types cover most of what you will see. Each one points at a different first check. The table scrolls sideways.

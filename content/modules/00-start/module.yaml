@@ -8,3 +8,8 @@ intro: |
 lessons:
   - 01-how-to-use-this.md
   - 02-set-up-and-pace.md
+
+prompts:
+  - title: "Explain a change before you keep it"
+    text: |
+      Here is the change you just made to my code. Before I accept it, go through it line by line: for each changed line, say in one sentence what it does and why it was needed. Mark any line that changes behaviour I did not ask for. Do not make further changes yet.

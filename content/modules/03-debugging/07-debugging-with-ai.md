@@ -2,6 +2,8 @@
 id: debugging-07
 title: Debugging with AI without losing the thread
 minutes: 8
+recap: |
+  Spend ten minutes on a bug alone, then give Claude the full traceback, what you expected and what happened, and ask for the cause before any fix. Reject patches that only hide the symptom, read every changed line, and after two failed patches go back to working code and narrow it yourself.
 ---
 
 ## Four habits

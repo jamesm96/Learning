@@ -2,6 +2,8 @@
 id: structure-03
 title: What a good function looks like
 minutes: 8
+recap: |
+  A good function does one job, which a verb name and one sentence without "and" can describe, takes what it needs as parameters and returns its result. Splitting a script into load, check and write keeps the checks pure, so they can be tested with a hand-made list and a new rule touches one place.
 ---
 
 Four tests for a good function:
@@ -62,6 +64,68 @@ options:
 answer: loop
 explain: |
   The checks only need a list of asset dictionaries. Loading and writing touch the disk. Right now the checks are tangled between the two, so testing them means preparing real files. That is the seam to cut along.
+```
+
+---
+
+```exercise split
+id: structure-03-split-draft
+prompt: Give each part of the draft to the function that should own it. Then compare with one way to split it.
+code: |
+  import json
+
+  data = json.load(open("D:/harbour/manifest.json"))
+  bad = []
+  for a in data["assets"]:
+      if not a["name"].startswith("SM_"):
+          bad.append(a["name"] + ": bad prefix")
+      if a["tris"] > 9000:
+          bad.append(a["name"] + ": over budget")
+  f = open("D:/harbour/report.txt", "w")
+  for line in bad:
+      f.write(line + "\n")
+  f.close()
+  print(len(bad), "problems")
+jobs:
+  - { id: load, name: load_manifest, description: "Read the manifest file and return its data" }
+  - { id: check, name: find_problems, description: "Return a list of problems for a list of assets" }
+  - { id: write, name: write_report, description: "Write the problems to a report file" }
+  - { id: main, name: main, description: "Run the steps in order and say how it went" }
+answer:
+  - { job: load, lines: "1-3" }
+  - { job: check, lines: "4-9" }
+  - { job: write, lines: "10-13" }
+  - { job: main, lines: "14" }
+model: |
+  import json
+  from pathlib import Path
+
+  TRI_BUDGET = 9000
+
+  def load_manifest(path):
+      text = Path(path).read_text(encoding="utf-8")
+      return json.loads(text)
+
+  def find_problems(assets, budget=TRI_BUDGET):
+      problems = []
+      for a in assets:
+          if not a["name"].startswith("SM_"):
+              problems.append(f"{a['name']}: bad prefix")
+          if a["tris"] > budget:
+              problems.append(f"{a['name']}: over budget")
+      return problems
+
+  def write_report(problems, path):
+      text = "\n".join(problems)
+      Path(path).write_text(text, encoding="utf-8")
+
+  def main():
+      manifest = load_manifest("D:/harbour/manifest.json")
+      problems = find_problems(manifest["assets"])
+      write_report(problems, "D:/harbour/report.txt")
+      print(len(problems), "problems")
+explain: |
+  Each job touches one kind of thing: the disk going in, the rules, the disk going out, and the order of the steps. The checks in lines 4 to 9 are the only part with real decisions in them, and once they are a function of their own they need no files at all. Small differences from the model are fine as long as no function does two of these jobs.
 ```
 
 ---
