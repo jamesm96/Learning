@@ -1,5 +1,6 @@
 import type { Module } from "../content/schema";
 import { Html } from "../components/Html";
+import { PromptCard } from "../components/PromptCard";
 import { lessonState } from "../progress/progress";
 import { useProgress } from "../progress/store";
 import { lessonHash } from "../routes";
@@ -55,6 +56,15 @@ export function ModuleScreen({ module }: ModuleScreenProps) {
               <li key={index} dangerouslySetInnerHTML={{ __html: html }} />
             ))}
           </ul>
+        </section>
+      )}
+
+      {module.prompts.length > 0 && (
+        <section class="panel">
+          <h2>Prompts for Claude</h2>
+          {module.prompts.map((prompt) => (
+            <PromptCard key={prompt.title} title={prompt.title} text={prompt.text} />
+          ))}
         </section>
       )}
 
