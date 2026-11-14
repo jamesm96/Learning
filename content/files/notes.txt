@@ -1,0 +1,4 @@
+Harbour level notes
+- crane_02 is over the triangle budget
+- boat_01 needs a lower LOD for the rope
+- lamp_03 has no triangle count yet

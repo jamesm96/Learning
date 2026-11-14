@@ -1,12 +1,12 @@
 import { useState } from "preact/hooks";
 import { runPython, stopPython } from "./runner";
-import type { RunResult } from "./types";
+import type { Files, RunResult } from "./types";
 
 export interface RunState {
   running: boolean;
   result: RunResult | null;
   loadFailed: boolean; // Python itself could not be downloaded or started
-  run: (code: string, check?: string) => Promise<RunResult | null>;
+  run: (code: string, check?: string, files?: Files) => Promise<RunResult | null>;
   stop: () => void;
   clear: () => void;
 }
@@ -17,11 +17,11 @@ export function useRun(): RunState {
   const [result, setResult] = useState<RunResult | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
 
-  const run = async (code: string, check = ""): Promise<RunResult | null> => {
+  const run = async (code: string, check = "", files: Files = {}): Promise<RunResult | null> => {
     setRunning(true);
     setLoadFailed(false);
     try {
-      const next = await runPython(code, check);
+      const next = await runPython(code, check, files);
       setResult(next);
       return next;
     } catch {

@@ -1,0 +1,5 @@
+name,type,tris,material
+rock_01,prop,4820,stone
+crane_02,prop,18250,metal
+boat_01,vehicle,9100,wood
+lamp_03,prop,,glass

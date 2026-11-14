@@ -2,6 +2,7 @@
 // enforces a time limit, and lets screens show whether Python is loading.
 
 import { useEffect, useState } from "preact/hooks";
+import { course } from "../content/course";
 import type { RunPython, RunResult } from "./types";
 import type { WorkerRequest, WorkerResponse } from "./worker";
 
@@ -54,15 +55,18 @@ function startWorker(): Worker {
   return created;
 }
 
-/** Run code (and optional hidden check code) in Python. Rejects only if Python itself could not load. */
-export const runPython: RunPython = (code, check = "") => {
+/**
+ * Run code (and optional hidden check code) in Python. The course's sample files, plus any
+ * extra files, are written into a fresh working folder first. Rejects only if Python itself could not load.
+ */
+export const runPython: RunPython = (code, check = "", files = {}) => {
   if (!worker) {
     worker = startWorker();
   }
   if (status !== "ready") setStatus("loading");
 
   const id = nextId++;
-  const request: WorkerRequest = { type: "run", id, code, check, indexURL };
+  const request: WorkerRequest = { type: "run", id, code, check, files: JSON.stringify({ ...course.files, ...files }), indexURL };
   return new Promise<RunResult>((resolve, reject) => {
     pending.set(id, { resolve, reject });
     worker!.postMessage(request);

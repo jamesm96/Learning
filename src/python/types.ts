@@ -14,5 +14,8 @@ export interface RunResult {
   timedOut: boolean; // stopped because it ran too long, or because Stop was pressed
 }
 
-/** Run code, then optional hidden check code in the same namespace. */
-export type RunPython = (code: string, check?: string) => Promise<RunResult>;
+/** Files to write into the working folder before the code runs, by name. */
+export type Files = Record<string, string>;
+
+/** Run code in a fresh working folder holding `files`, then optional hidden check code in the same namespace. */
+export type RunPython = (code: string, check?: string, files?: Files) => Promise<RunResult>;

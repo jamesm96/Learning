@@ -12,6 +12,7 @@ async function getPyodide(): Promise<PyodideAPI> {
   pyodide ??= (async () => {
     const py = await loadPyodide();
     py.FS.writeFile("/home/pyodide/harness.py", readFileSync("src/python/harness.py", "utf-8"));
+    py.FS.writeFile("/home/pyodide/simulated.py", readFileSync("src/python/simulated.py", "utf-8"));
     py.runPython("import sys; sys.path.insert(0, '/home/pyodide'); import harness");
     return py;
   })();
@@ -19,7 +20,7 @@ async function getPyodide(): Promise<PyodideAPI> {
 }
 
 /** A RunPython function backed by Pyodide in Node. */
-export const runPythonInNode: RunPython = async (code, check = "") => {
+export const runPythonInNode: RunPython = async (code, check = "", files = {}) => {
   const py = await getPyodide();
   let stdout = "";
   const capture = {
@@ -32,7 +33,7 @@ export const runPythonInNode: RunPython = async (code, check = "") => {
   py.setStderr(capture);
 
   const run = py.globals.get("harness").run;
-  const result = run(code, check).toJs({ dict_converter: Object.fromEntries }) as Omit<
+  const result = run(code, check, JSON.stringify(files)).toJs({ dict_converter: Object.fromEntries }) as Omit<
     RunResult,
     "stdout" | "timedOut" | "checkError"
   > & { check_error: RunResult["checkError"] };

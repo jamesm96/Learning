@@ -1,0 +1,9 @@
+{
+  "project": "harbour",
+  "version": 3,
+  "assets": [
+    {"name": "rock_01", "type": "prop", "tris": 4820, "materials": ["moss", "stone"], "path": "props/rock_01.fbx"},
+    {"name": "crane_02", "type": "prop", "tris": 18250, "materials": ["metal"], "path": "props/crane_02.fbx"},
+    {"name": "boat_01", "type": "vehicle", "tris": 9100, "materials": ["wood", "rope", "metal"], "path": "vehicles/boat_01.fbx"}
+  ]
+}

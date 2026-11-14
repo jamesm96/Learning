@@ -3,9 +3,10 @@
 
 import type { PyodideAPI } from "pyodide";
 import harnessSource from "./harness.py?raw";
+import simulatedSource from "./simulated.py?raw";
 import type { RunResult } from "./types";
 
-export type WorkerRequest = { type: "run"; id: number; code: string; check: string; indexURL: string };
+export type WorkerRequest = { type: "run"; id: number; code: string; check: string; files: string; indexURL: string };
 
 export type WorkerResponse =
   | { type: "ready" }
@@ -31,6 +32,7 @@ function getPyodide(indexURL: string): Promise<PyodideAPI> {
     py.setStdout(capture);
     py.setStderr(capture);
     py.FS.writeFile("/home/pyodide/harness.py", harnessSource);
+    py.FS.writeFile("/home/pyodide/simulated.py", simulatedSource);
     py.runPython("import sys; sys.path.insert(0, '/home/pyodide'); import harness");
     return py;
   })();
@@ -53,7 +55,7 @@ scope.onmessage = async (event: MessageEvent<WorkerRequest>) => {
   scope.postMessage({ type: "started", id: request.id } satisfies WorkerResponse);
   output = "";
   const run = py.globals.get("harness").run;
-  const raw = run(request.code, request.check).toJs({ dict_converter: Object.fromEntries }) as {
+  const raw = run(request.code, request.check, request.files).toJs({ dict_converter: Object.fromEntries }) as {
     error?: RunResult["error"];
     check_error?: RunResult["checkError"];
   };
