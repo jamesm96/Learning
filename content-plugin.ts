@@ -1,11 +1,15 @@
 // Vite plugin: lets the app write `import course from "virtual:course"`.
-// At build (and on every edit in dev) it reads content/, validates it and
-// hands the app plain data. Any content mistake stops the build with a clear message.
+// At build (and on every edit in dev) it reads content/, validates it, runs every
+// runnable exercise in real Python (Pyodide in Node) and hands the app plain data.
+// Any content mistake or Python mismatch stops the build with a clear message.
 
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import type { Plugin } from "vite";
 import { loadCourse } from "./src/content/load-course.ts";
+import { ContentError } from "./src/content/parse-lesson.ts";
+import { checkWithPython } from "./src/content/python-checks.ts";
+import { runPythonInNode } from "./python-node.ts";
 
 const VIRTUAL_ID = "virtual:course";
 const RESOLVED_ID = "\0virtual:course";
@@ -20,7 +24,7 @@ export function contentPlugin(contentDir = "content"): Plugin {
       return id === VIRTUAL_ID ? RESOLVED_ID : undefined;
     },
 
-    load(id) {
+    async load(id) {
       if (id !== RESOLVED_ID) return undefined;
       const read = (relativePath: string) => {
         const fullPath = join(root, relativePath);
@@ -28,6 +32,11 @@ export function contentPlugin(contentDir = "content"): Plugin {
         return readFileSync(fullPath, "utf-8");
       };
       const course = loadCourse(read);
+      const problems = await checkWithPython(course, runPythonInNode);
+      if (problems.length > 0) {
+        const list = problems.join("\n\n");
+        throw new ContentError(`Python checks found ${problems.length} problem(s):\n\n${list}`);
+      }
       return `export default ${JSON.stringify(course)};`;
     },
 
