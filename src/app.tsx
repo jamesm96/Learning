@@ -2,6 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import { findLesson, findModule } from "./content/course";
 import { parseRoute, type Route } from "./routes";
 import { TabBar } from "./components/TabBar";
+import { KeyboardBar } from "./editor/KeyboardBar";
 import { LessonPlayer } from "./lesson/LessonPlayer";
 import { TodayScreen } from "./screens/Today";
 import { LearnScreen } from "./screens/Learn";
@@ -35,6 +36,7 @@ export function App() {
     return (
       <main class="screen screen-lesson" id="main">
         <LessonPlayer key={lesson.id} module={module} lesson={lesson} />
+        <KeyboardBar />
       </main>
     );
   }
@@ -48,6 +50,7 @@ export function App() {
         {route.tab === "me" && <MeScreen />}
       </main>
       <TabBar current={route.tab} />
+      <KeyboardBar />
     </div>
   );
 }
