@@ -14,6 +14,12 @@
   --code-bg: #e8ecf2;
   --good: #1b7f4b;
   --bad: #b3362b;
+  --tok-keyword: #8a3fa0;
+  --tok-string: #8f5400;
+  --tok-comment: #5f6b80;
+  --tok-number: #0b6fa8;
+  --tok-definition: #0b6a66;
+  --mark-bg: #fde7a8;
 
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -41,6 +47,12 @@
     --code-bg: #0b1016;
     --good: #5fd08f;
     --bad: #f08a7e;
+    --tok-keyword: #c79bea;
+    --tok-string: #e8b46a;
+    --tok-comment: #8a97ad;
+    --tok-number: #6fc3f0;
+    --tok-definition: #6fd8cf;
+    --mark-bg: #5a4a14;
     color-scheme: dark;
   }
 }
@@ -56,5 +68,11 @@
   --code-bg: #0b1016;
   --good: #5fd08f;
   --bad: #f08a7e;
+  --tok-keyword: #c79bea;
+  --tok-string: #e8b46a;
+  --tok-comment: #8a97ad;
+  --tok-number: #6fc3f0;
+  --tok-definition: #6fd8cf;
+  --mark-bg: #5a4a14;
   color-scheme: dark;
 }
