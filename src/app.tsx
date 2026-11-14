@@ -4,6 +4,7 @@ import { parseRoute, type Route } from "./routes";
 import { TabBar } from "./components/TabBar";
 import { KeyboardBar } from "./editor/KeyboardBar";
 import { LessonPlayer } from "./lesson/LessonPlayer";
+import { ReviewSession } from "./review/ReviewSession";
 import { TodayScreen } from "./screens/Today";
 import { LearnScreen } from "./screens/Learn";
 import { ModuleScreen } from "./screens/ModuleScreen";
@@ -29,7 +30,16 @@ export function App() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [route.tab, route.moduleId, route.lessonId]);
+  }, [route.tab, route.moduleId, route.lessonId, route.review]);
+
+  if (route.review) {
+    return (
+      <main class="screen screen-lesson" id="main">
+        <ReviewSession key={route.reviewLimit ?? "all"} limit={route.reviewLimit} />
+        <KeyboardBar />
+      </main>
+    );
+  }
 
   if (module && lesson) {
     // The key makes a fresh player for each lesson, so one lesson's step never leaks into the next.
