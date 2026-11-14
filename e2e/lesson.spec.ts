@@ -21,6 +21,7 @@ test("completes the first lesson, with progress shown afterwards", async ({ page
     "Read every changed line",
     "A wrong prediction shows you exactly what you misunderstood",
     "You learn what each error message means",
+    "Reread the part you could not explain",
   ];
   for (const answer of rightAnswers) {
     await readUntilExercise(page);
@@ -34,7 +35,7 @@ test("completes the first lesson, with progress shown afterwards", async ({ page
   await page.getByRole("textbox").fill("Predict, read every change, explain back, break things on purpose.");
   await page.getByRole("button", { name: "Finish lesson" }).click();
   await expect(page.getByText("Lesson complete")).toBeVisible();
-  await expect(page.getByText("3 of 3 right first time.")).toBeVisible();
+  await expect(page.getByText("4 of 4 right first time.")).toBeVisible();
 
   // Progress survives a reload: Today now offers the second lesson.
   await page.goto("/#/today");

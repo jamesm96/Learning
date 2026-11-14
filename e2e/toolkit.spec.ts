@@ -103,7 +103,7 @@ test("files: lesson code reads the sample files", async ({ page }) => {
 });
 
 test("explain it back: text is saved, and survives a reload", async ({ page }) => {
-  await openAtStep(page, "start", "start-01", 7);
+  await openAtStep(page, "start", "start-01", 8);
   await page.getByRole("textbox").fill("Judge code by predicting and reading changes.");
   await page.getByRole("button", { name: "Compare with a model answer" }).click();
   await expect(page.locator(".model-answer")).toContainText("One way to say it");

@@ -59,13 +59,13 @@ test("exercises answered before this version come up for review, and a review mo
 
   await expect(page.getByText("1 card is due.")).toBeVisible();
   await page.getByRole("link", { name: "5-minute review" }).click();
-  await expect(page.getByText("Card 1 of 1")).toBeVisible();
+  await expect(page.getByText("Review · 1 of 1")).toBeVisible();
   await page.getByRole("button", { name: '"123"' }).click();
   await expect(page.locator(".feedback-verdict")).toContainText("Right.");
-  await page.getByRole("button", { name: "Finish review" }).click();
+  await page.getByRole("button", { name: "Finish", exact: true }).click();
   await expect(page.getByRole("heading", { name: "1 of 1 right" })).toBeVisible();
 
-  await page.getByRole("link", { name: "Back to Today" }).click();
+  await page.getByRole("link", { name: "Done", exact: true }).click();
   await expect(page.getByText(/Nothing due today/)).toBeVisible();
 });
 
@@ -75,7 +75,7 @@ test("a recall card asks for the lesson from memory, then shows the recap", asyn
   await page.getByRole("button", { name: "Show the model answer" }).click();
   await expect(page.locator(".model-answer")).toContainText("dictionary");
   await page.getByRole("button", { name: "Not yet" }).click();
-  await page.getByRole("button", { name: "Finish review" }).click();
+  await page.getByRole("button", { name: "Finish", exact: true }).click();
   await expect(page.getByRole("heading", { name: "0 of 1 right" })).toBeVisible();
 });
 
