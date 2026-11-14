@@ -2,7 +2,10 @@ import type { Exercise, Step } from "../content/schema";
 import { Html } from "../components/Html";
 import { ChoiceView } from "../exercises/ChoiceView";
 import { ClozeView } from "../exercises/ClozeView";
+import { EditView } from "../exercises/EditView";
+import { FixView } from "../exercises/FixView";
 import { PredictView } from "../exercises/PredictView";
+import { TracebackView } from "../exercises/TracebackView";
 
 interface StepViewProps {
   step: Step;
@@ -36,5 +39,11 @@ function ExerciseView({ exercise, onAnswer }: ExerciseViewProps) {
       return <ChoiceView exercise={exercise} onAnswer={onAnswer} />;
     case "cloze":
       return <ClozeView exercise={exercise} onAnswer={onAnswer} />;
+    case "edit":
+      return <EditView exercise={exercise} onAnswer={onAnswer} />;
+    case "fix":
+      return <FixView exercise={exercise} onAnswer={onAnswer} />;
+    case "traceback":
+      return <TracebackView exercise={exercise} onAnswer={onAnswer} />;
   }
 }
