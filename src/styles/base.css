@@ -1,0 +1,245 @@
+/* Layout and element styles. Phone first: everything is sized for a
+   375-430px screen, then centred in a reading column on wider screens. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  overflow-x: hidden; /* the page itself never scrolls sideways; code blocks scroll inside themselves */
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+}
+
+pre {
+  background: var(--code-bg);
+  padding: 12px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- Shell ---- */
+
+.shell {
+  min-height: 100dvh;
+}
+
+.screen {
+  max-width: var(--column);
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 24px) calc(env(safe-area-inset-right) + var(--gutter))
+    calc(env(safe-area-inset-bottom) + var(--tabbar-height) + 96px) calc(env(safe-area-inset-left) + var(--gutter));
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.screen-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 8px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+/* ---- Tab bar ---- */
+
+.tabbar {
+  position: fixed;
+  inset: auto 0 0 0;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  z-index: 10;
+}
+
+.tabbar ul {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: var(--column);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.tabbar a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: var(--tabbar-height);
+  min-width: var(--tap);
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-top: 2px solid transparent;
+}
+
+.tabbar a[aria-current="page"] {
+  color: var(--ink);
+  border-top-color: var(--accent);
+}
+
+.tabbar a[aria-current="page"] span {
+  font-weight: 700;
+}
+
+.tabbar svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tabbar a[aria-current="page"] svg {
+  stroke: var(--accent);
+}
+
+/* ---- Primary action, pinned above the tab bar in the thumb zone ---- */
+
+.primary-action {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom) + var(--tabbar-height));
+  padding: 12px calc(env(safe-area-inset-right) + var(--gutter)) 12px calc(env(safe-area-inset-left) + var(--gutter));
+  background: linear-gradient(to top, var(--bg) 70%, transparent);
+}
+
+.button-primary {
+  display: block;
+  width: 100%;
+  max-width: var(--column);
+  margin: 0 auto;
+  min-height: 52px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font: 600 1.0625rem var(--font-body);
+  cursor: pointer;
+}
+
+.button-primary:disabled {
+  background: var(--line);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* ---- Placeholders (phase 0 only) ---- */
+
+.placeholder {
+  border-left: 3px solid var(--line);
+  padding: 4px 0 4px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.placeholder p {
+  color: var(--muted);
+}
+
+.placeholder-phase {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+/* ---- Course map ---- */
+
+.module-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.module-list li {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.module-number {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  color: var(--accent);
+}
+
+.module-list p {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.app-version {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}

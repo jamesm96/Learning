@@ -1,0 +1,60 @@
+/* Design tokens: every colour, font and size the app uses.
+   Colours are carried over from the original course page.
+   Dark values apply when the system is dark, unless the user picks light
+   (data-theme on <html>, wired up in phase 4). */
+
+:root {
+  --bg: #f2f4f7;
+  --surface: #ffffff;
+  --ink: #16202e;
+  --muted: #56637a;
+  --line: #d5dbe5;
+  --accent: #0b7a75;
+  --accent-ink: #ffffff;
+  --code-bg: #e8ecf2;
+  --good: #1b7f4b;
+  --bad: #b3362b;
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --text-base: 1.0625rem; /* 17px body text */
+  --text-code: 0.9375rem; /* 15px code */
+  --column: 680px;
+  --gutter: 16px;
+  --tap: 44px;
+  --tabbar-height: 64px;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11161d;
+    --surface: #19212b;
+    --ink: #e4e9f0;
+    --muted: #9aa7ba;
+    --line: #2c3746;
+    --accent: #4cc2b8;
+    --accent-ink: #06211f;
+    --code-bg: #0b1016;
+    --good: #5fd08f;
+    --bad: #f08a7e;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #11161d;
+  --surface: #19212b;
+  --ink: #e4e9f0;
+  --muted: #9aa7ba;
+  --line: #2c3746;
+  --accent: #4cc2b8;
+  --accent-ink: #06211f;
+  --code-bg: #0b1016;
+  --good: #5fd08f;
+  --bad: #f08a7e;
+  color-scheme: dark;
+}
