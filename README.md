@@ -7,7 +7,7 @@ It is a Progressive Web App: a website that installs to your home screen, opens
 full-screen like an app, and works offline. There are no accounts and no server.
 Your progress stays on your device.
 
-**Status:** phase 0. The four-tab shell installs and runs; lessons arrive in phase 1.
+**Status:** phase 1. Start and Module 1 are playable, with multiple-choice, fill-the-gap and predict exercises. Progress is saved on the device. Running Python arrives in phase 2.
 
 ## Install it on your phone
 
@@ -47,6 +47,28 @@ so use the deployed site for that.
 The first time you run `npm run e2e`, install the test browsers with
 `npx playwright install chromium webkit`.
 
+## Writing lessons
+
+Each lesson is a Markdown file with a short YAML header. Steps are separated by a
+line containing only `---`. An exercise is a fenced block:
+
+````markdown
+```exercise choice
+id: data-01-join-strings
+question: 'What does `"12" + "3"` give you?'
+options:
+  - { id: fifteen, text: "15" }
+  - { id: joined, text: '"123"' }
+answer: joined
+explain: Both sides are strings, so `+` joins them.
+```
+````
+
+Types so far: `predict`, `choice` and `cloze`. The full rules are in
+`src/content/schema.ts`. Run `npm run dev` and any mistake shows up straight away
+with the file and step it is in. In YAML, put quotes around option text that
+contains a comma or starts with a backtick.
+
 ## How it is deployed
 
 Every push to `main` runs `.github/workflows/deploy.yml`, which installs, tests,
@@ -56,11 +78,19 @@ builds and publishes to GitHub Pages. One-time setup on github.com:
 ## Where things are
 
 ```
+content/            the course: course.yaml, then one folder per module
+  modules/01-data/  module.yaml plus one Markdown file per lesson
+content-plugin.ts   turns content/ into data for the app at build time
 src/
-  main.tsx          entry point: registers the service worker, renders the app
+  main.tsx          entry point: loads progress, registers the service worker, renders the app
   app.tsx           the shell: current screen plus the tab bar
-  tabs.ts           the four tabs and how they map to the URL (pure, tested)
-  screens/          one file per tab
+  tabs.ts, routes.ts  where you are in the app, read from the URL (pure, tested)
+  content/          content schema, lesson parser and course loader (pure, tested)
+  progress/         what you have done, and saving it on the device
+  grading/          marking answers (pure, tested)
+  lesson/           the lesson player
+  exercises/        one component per exercise type
+  screens/          one file per screen
   components/       small shared pieces (tab bar, icons)
   styles/           design tokens (colours, fonts) and layout
 e2e/                end-to-end tests on emulated phones

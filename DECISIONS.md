@@ -31,9 +31,10 @@ One short entry per significant choice: what, why, and what was rejected.
 - **Why:** reproducible builds; brand-new releases occasionally ship regressions.
 - **Also:** TypeScript 6.0.3 rather than 7.x, because some tooling still assumes the 6.x compiler API.
 
-## 7. System fonts until web fonts are approved
-- **What:** the font stacks name Space Grotesk, Inter and JetBrains Mono (from the source course) but fall back to system fonts, which is what you see today.
-- **Why:** the brief forbids third-party calls at runtime, so the fonts must be self-hosted, which means adding font files or `@fontsource` packages. That is a new dependency, so it waits for approval.
+## 7. Self-hosted fonts, Latin subset only
+- **What:** Space Grotesk, Inter and JetBrains Mono from `@fontsource` packages, imported in `src/styles/fonts.css`. Approved in phase 1.
+- **Why:** the brief forbids third-party calls at runtime, so fonts ship inside the app and are precached for offline use. Only the Latin subset and the weights in use are imported, about 150 KB, downloaded once.
+- **Rejected:** Google Fonts links (a runtime call to Google); system fonts only (generic look).
 
 ## 8. Config files are not type-checked by `tsc`
 - **What:** `tsconfig.json` includes `src` and `e2e` only.
@@ -44,3 +45,29 @@ One short entry per significant choice: what, why, and what was rejected.
 - **What:** `scripts/make-icons.mjs` screenshots `public/icons/icon.svg` at 192, 512, 512 maskable and 180 (Apple). The PNGs are committed.
 - **Why:** reuses a tool already installed for testing.
 - **Rejected:** `@vite-pwa/assets-generator` (another dependency for four images).
+
+## 10. Content is built into the app by a Vite plugin
+- **What:** `content-plugin.ts` reads `content/` at build time, validates it with Zod, renders Markdown to HTML with `marked`, and hands the app plain data through `import course from "virtual:course"`.
+- **Why:** content mistakes stop the build instead of breaking on the phone. Zod, YAML and `marked` run only at build time, so none of them ship to the phone.
+- **Rejected:** parsing Markdown in the browser (bigger download, errors found late); a script that writes a generated JSON file (one more file to keep in sync).
+
+## 11. Content loading is pure; files are passed in
+- **What:** `loadCourse(read)` takes a function that reads a file, rather than reading the disk itself. The plugin passes real files; tests pass an in-memory folder.
+- **Why:** the same "keep the host at the edge" idea Module 2 teaches. It also keeps `node:fs` out of `src/`, so `@types/node` is still not needed.
+
+## 12. Build-time files import with `.ts` extensions
+- **What:** files the Vite config loads (`content-plugin.ts`, `src/content/*`) write `import ... from "./schema.ts"`. `tsconfig.json` allows this with `allowImportingTsExtensions`.
+- **Why:** Vite 8 warns that its upcoming native config loader needs real file extensions. App code is bundled by Vite and keeps the shorter form.
+
+## 13. Exercise answers are stored by id, and the first try is kept
+- **What:** progress records each exercise by its id: attempts, whether the first try was right, and the last result. Lesson progress stores the step to resume at.
+- **Why:** ids survive reordering and shuffled options. The first-try result is the honest score, and spaced review in phase 4 will need it.
+- **Safety:** progress carries a version number. Unreadable or newer-version data is copied to a backup key, never silently deleted.
+
+## 14. Predict exercises are self-assessed until phase 2
+- **What:** for now you predict in your head, reveal the real output, and say whether you matched. Phase 2 adds typing a prediction and running the code in Pyodide.
+- **Why:** the "predict first" habit matters from lesson one. The content format already stores the expected output, so phase 2 only changes the component, not the lessons.
+
+## 15. Lessons hide the tab bar
+- **What:** a lesson fills the screen, with a close button at the top and Back/Next at the bottom.
+- **Why:** more room for code on a small screen, and the main action stays in the thumb zone. Closing returns to the module page, and your step is saved.
