@@ -35,13 +35,13 @@ export function StepView({ lessonId, step, onAnswer }: StepViewProps) {
   );
 }
 
-interface ExerciseViewProps {
+export interface ExerciseViewProps {
   exercise: Exercise;
   onAnswer: (correct: boolean) => void;
 }
 
-/** Pick the component for each exercise type. */
-function ExerciseView({ exercise, onAnswer }: ExerciseViewProps) {
+/** Pick the component for each exercise type. Also used by review sessions. */
+export function ExerciseView({ exercise, onAnswer }: ExerciseViewProps) {
   switch (exercise.type) {
     case "predict":
       return <PredictView exercise={exercise} onAnswer={onAnswer} />;

@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import type { Lesson, Module } from "../content/schema";
-import { completeLesson, recordAnswer, saveStep } from "../progress/progress";
+import { isReviewable } from "../content/course";
+import { dayKey } from "../progress/dates";
+import { addToReview, completeLesson, recordAnswer, saveStep } from "../progress/progress";
+import { RECALL_PREFIX } from "../progress/review";
+import { buzz } from "../progress/settings-effects";
 import { requestPersistentStorage } from "../progress/storage";
 import { updateProgress, useProgress } from "../progress/store";
 import { moduleHash } from "../routes";
@@ -39,7 +43,12 @@ export function LessonPlayer({ module, lesson }: LessonPlayerProps) {
   const goNext = () => {
     if (!answered) return;
     if (isLast) {
-      updateProgress((p) => completeLesson(p, lesson.id, new Date()));
+      // A lesson with a recap gets a recall card: later, explain it from memory.
+      const hasRecall = lesson.steps.some((s) => s.kind === "explain");
+      updateProgress((p) => {
+        const done = completeLesson(p, lesson.id, new Date());
+        return hasRecall ? addToReview(done, RECALL_PREFIX + lesson.id, dayKey(new Date())) : done;
+      });
       setFinished(true);
     } else {
       goTo(index + 1);
@@ -52,7 +61,12 @@ export function LessonPlayer({ module, lesson }: LessonPlayerProps) {
 
   const onAnswer = (exerciseId: string, correct: boolean) => {
     requestPersistentStorage();
-    updateProgress((p) => recordAnswer(p, exerciseId, correct, new Date()));
+    buzz(correct);
+    const now = new Date();
+    updateProgress((p) => {
+      const recorded = recordAnswer(p, exerciseId, correct, now);
+      return isReviewable(exerciseId) ? addToReview(recorded, exerciseId, dayKey(now)) : recorded;
+    });
   };
 
   const swipe = useSwipe(goNext, goBack);
