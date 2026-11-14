@@ -35,7 +35,7 @@ export default defineConfig({
       },
       workbox: {
         // Precache the whole app shell so it opens offline after the first visit.
-        globPatterns: ["**/*.{js,css,html,svg,png,webmanifest}"],
+        globPatterns: ["**/*.{js,css,html,svg,png,woff2,webmanifest}"],
       },
     }),
   ],
