@@ -1,0 +1,460 @@
+/* Phase 3 exercises: shape, reorder, split, diff review, Git, explain it back, and prompts. */
+
+.text-input {
+  width: 100%;
+  font: 16px/1.5 var(--font-body); /* 16px stops iOS zooming in */
+  padding: 10px 12px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.text-input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.model-answer {
+  border-left: 3px solid var(--accent);
+  padding-left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---- Shape it: the data tree ---- */
+
+.tree {
+  background: var(--code-bg);
+  padding: 8px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+}
+
+.tree-children {
+  margin-left: 14px;
+  border-left: 1px dashed var(--line);
+  padding-left: 6px;
+}
+
+.tree-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  width: max-content;
+  min-width: 100%;
+  padding: 0 8px;
+  background: none;
+  border: 1.5px solid transparent;
+  border-radius: 4px;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tree-row.is-selected {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.tree-arrow {
+  width: 1ch;
+  color: var(--accent);
+}
+
+.tree-key {
+  font-weight: 700;
+}
+
+.tree-summary {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.path-display {
+  overflow-wrap: anywhere;
+}
+
+.path-display code {
+  font-size: var(--text-code);
+}
+
+.path-value {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+/* ---- Reorder lines ---- */
+
+.parsons-lines,
+.split-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.parsons-line,
+.split-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: var(--tap);
+  padding: 4px 10px;
+  background: var(--code-bg);
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  text-align: left;
+  overflow-x: auto;
+  cursor: pointer;
+}
+
+.parsons-line code,
+.split-line code {
+  white-space: pre;
+  font-size: var(--text-code);
+}
+
+.parsons-indent {
+  border-right: 2px dotted var(--muted);
+  margin-right: 2px;
+}
+
+.parsons-indent:empty {
+  display: none;
+}
+
+.parsons-line.is-selected {
+  border-color: var(--accent);
+  border-width: 2px;
+  background: var(--surface);
+}
+
+.parsons-controls {
+  position: sticky;
+  bottom: calc(env(safe-area-inset-bottom) + 84px); /* stays in reach above the lesson footer */
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  z-index: 5;
+}
+
+.parsons-controls .kb-key {
+  flex: 1;
+  font-size: 1.25rem;
+}
+
+.parsons-controls .kb-key:disabled {
+  color: var(--line);
+}
+
+/* ---- Split this function ---- */
+
+:root {
+  --job-0: #0b7a75;
+  --job-1: #a8500c;
+  --job-2: #6a4bb0;
+  --job-3: #1f6fb2;
+  --job-4: #9a3d6b;
+  --job-5: #5b7a12;
+}
+
+.job-0 { --job: var(--job-0); }
+.job-1 { --job: var(--job-1); }
+.job-2 { --job: var(--job-2); }
+.job-3 { --job: var(--job-3); }
+.job-4 { --job: var(--job-4); }
+.job-5 { --job: var(--job-5); }
+
+.job-chip {
+  border-left: 6px solid var(--job);
+}
+
+.split-line {
+  gap: 6px;
+  padding-left: 4px;
+}
+
+.split-line.has-job {
+  border-left: 6px solid var(--job);
+}
+
+.split-line:disabled {
+  cursor: default;
+}
+
+.split-line.is-different {
+  border-style: dashed;
+}
+
+.split-number {
+  flex: none;
+  width: 2.5ch;
+  text-align: right;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.split-tag {
+  margin-left: auto;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.split-tag.is-model {
+  color: var(--bad);
+}
+
+/* ---- Review the diff ---- */
+
+.diff-view {
+  display: flex;
+  flex-direction: column;
+  background: var(--code-bg);
+  padding: 6px 0;
+  overflow-x: auto;
+}
+
+.diff-view pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+  white-space: pre;
+}
+
+.diff-line {
+  padding: 2px 12px;
+}
+
+.diff-line.is-meta {
+  color: var(--muted);
+}
+
+.diff-change {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: var(--tap);
+  justify-content: center;
+  width: max-content;
+  min-width: 100%;
+  background: none;
+  border: 0;
+  border-left: 4px solid transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.diff-change.is-added {
+  background: color-mix(in srgb, var(--good) 12%, transparent);
+}
+
+.diff-change.is-removed {
+  background: color-mix(in srgb, var(--bad) 12%, transparent);
+}
+
+.diff-change.is-flagged {
+  border-left-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.diff-change.should-flag:not(.is-flagged) {
+  border-left: 4px dashed var(--bad);
+}
+
+.diff-change:disabled {
+  cursor: default;
+}
+
+/* ---- Git ---- */
+
+.git-state {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .git-state {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.git-panel {
+  background: var(--code-bg);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.git-heading {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.git-files,
+.git-history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.git-file {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  width: 100%;
+  min-height: var(--tap);
+  padding: 4px 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.git-file.is-changed {
+  border-left: 4px solid var(--accent);
+}
+
+.git-file-state {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.git-file-diff {
+  margin: 4px 0 0;
+  padding: 8px;
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.git-file-diff .is-added {
+  color: var(--good);
+}
+
+.git-file-diff .is-removed {
+  color: var(--bad);
+}
+
+.git-history li {
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+
+.git-id {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.git-branch {
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.git-branch.is-head {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.git-commands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.git-commands .kb-key {
+  font-size: 0.875rem;
+}
+
+.git-commands .kb-key[aria-pressed="true"] {
+  border-color: var(--accent);
+}
+
+.git-ask,
+.git-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.git-form .button-run {
+  align-self: flex-start;
+}
+
+.git-log {
+  background: var(--code-bg);
+  padding: 10px 12px;
+  max-height: 16rem;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse; /* newest at the bottom, scrolled into view */
+}
+
+.git-log pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.git-command {
+  color: var(--accent);
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.git-entry.is-refused .git-output {
+  color: var(--bad);
+}
+
+/* ---- Prompts ---- */
+
+.prompt-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prompt-title {
+  font-weight: 600;
+}
+
+.prompt-card pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
