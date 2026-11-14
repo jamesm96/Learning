@@ -4,11 +4,15 @@
 import { Marked } from "marked";
 import { parse as parseYaml } from "yaml";
 import { z } from "zod";
+import { highlightPythonToHtml } from "./highlight.ts";
 import {
   choiceSource,
   clozeSource,
+  editSource,
+  fixSource,
   lessonFrontmatter,
   predictSource,
+  tracebackSource,
   type Exercise,
   type Lesson,
   type Step,
@@ -17,7 +21,20 @@ import {
 /** A mistake in a content file. The message says which file and what is wrong. */
 export class ContentError extends Error {}
 
-const markdown = new Marked({ gfm: true });
+const markdown = new Marked({
+  gfm: true,
+  renderer: {
+    // Python code blocks (and unlabelled ones) get syntax colours at build time, so the phone does no work.
+    // Other languages, such as ```text or ```diff, fall back to marked's plain rendering.
+    code({ text, lang }) {
+      // A ```traceback block holds Python code that fails. The build runs it and puts the real
+      // traceback here (see python-checks.ts), so no traceback is ever typed by hand.
+      if (lang === "traceback") return `<div data-traceback="${encodeURIComponent(text)}"></div>\n`;
+      if (lang && lang !== "python") return false;
+      return `<pre class="code" tabindex="0"><code>${highlightPythonToHtml(text)}</code></pre>\n`;
+    },
+  },
+});
 
 /** Render a block of Markdown (paragraphs, lists, code, tables) to HTML. */
 export function markdownToHtml(text: string): string {
@@ -91,7 +108,7 @@ export function parseExercise(type: string, yamlText: string): Exercise {
         tag: ex.tag,
         questionHtml: inlineMarkdownToHtml(ex.question),
         code: ex.code === undefined ? undefined : trimCode(ex.code),
-        options: ex.options.map((option) => ({ id: option.id, html: inlineMarkdownToHtml(option.text) })),
+        options: renderOptions(ex.options),
         answer: ex.answer,
         explainHtml: markdownToHtml(ex.explain),
       };
@@ -107,9 +124,54 @@ export function parseExercise(type: string, yamlText: string): Exercise {
         explainHtml: markdownToHtml(ex.explain),
       };
     }
+    case "edit": {
+      const ex = check(editSource, data, type);
+      return {
+        type: "edit",
+        id: ex.id,
+        goalHtml: inlineMarkdownToHtml(ex.goal),
+        code: trimCode(ex.code),
+        check: trimCode(ex.check),
+        solution: trimCode(ex.solution),
+        explainHtml: markdownToHtml(ex.explain),
+      };
+    }
+    case "fix": {
+      const ex = check(fixSource, data, type);
+      return {
+        type: "fix",
+        id: ex.id,
+        symptomHtml: ex.symptom === undefined ? undefined : inlineMarkdownToHtml(ex.symptom),
+        code: trimCode(ex.code),
+        check: trimCode(ex.check),
+        solution: trimCode(ex.solution),
+        cause: { options: renderOptions(ex.cause.options), answer: ex.cause.answer },
+        explainHtml: markdownToHtml(ex.explain),
+      };
+    }
+    case "traceback": {
+      const ex = check(tracebackSource, data, type);
+      return {
+        type: "traceback",
+        id: ex.id,
+        code: trimCode(ex.code),
+        traceback: "", // generated later by really running the code (see python-checks.ts)
+        questionHtml: inlineMarkdownToHtml(ex.question),
+        options: renderOptions(ex.options),
+        answer: ex.answer,
+        explainHtml: markdownToHtml(ex.explain),
+      };
+    }
     default:
-      throw new ContentError(`unknown exercise type "${type}" (expected predict, choice or cloze)`);
+      throw new ContentError(
+        `unknown exercise type "${type}" (expected predict, choice, cloze, edit, fix or traceback)`,
+      );
   }
+}
+
+/** Render each option's Markdown text to inline HTML. */
+function renderOptions(options: { id: string; text: string }[]): { id: string; html: string }[] {
+  return options.map((option) => ({ id: option.id, html: inlineMarkdownToHtml(option.text) }));
 }
 
 /** Validate data with a Zod schema, or throw a ContentError listing every problem. */

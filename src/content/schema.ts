@@ -55,6 +55,54 @@ export const clozeSource = z
     message: "each blank's answer must be one of its options",
   });
 
+/** A list of options with the id of the right one. Shared by the cause questions below. */
+const optionsWithAnswer = z
+  .strictObject({
+    options: z.array(z.strictObject({ id, text: z.string().min(1) })).min(2).max(5),
+    answer: id,
+  })
+  .refine((q) => q.options.some((option) => option.id === q.answer), {
+    message: "answer must be the id of one of the options",
+  });
+
+/**
+ * Edit and run: change the code to meet a goal. Hidden `check` code runs afterwards
+ * (usually asserts). The build proves the starting code fails the check and `solution` passes it.
+ */
+export const editSource = z.strictObject({
+  id,
+  goal: z.string().min(1),
+  code: z.string().min(1),
+  check: z.string().min(1),
+  solution: z.string().min(1),
+  explain: z.string().min(1),
+});
+
+/** Fix the bug: like edit and run, but the code is broken. Afterwards, name the cause. */
+export const fixSource = z.strictObject({
+  id,
+  symptom: z.string().optional(),
+  code: z.string().min(1),
+  check: z.string().min(1),
+  solution: z.string().min(1),
+  cause: optionsWithAnswer,
+  explain: z.string().min(1),
+});
+
+/** Read the traceback: the build runs the code to produce a real traceback; tap the failing line, then pick the cause. */
+export const tracebackSource = z
+  .strictObject({
+    id,
+    code: z.string().min(1),
+    question: z.string().default("What is the most likely cause?"),
+    options: z.array(z.strictObject({ id, text: z.string().min(1) })).min(2).max(5),
+    answer: id,
+    explain: z.string().min(1),
+  })
+  .refine((ex) => ex.options.some((option) => option.id === ex.answer), {
+    message: "answer must be the id of one of the options",
+  });
+
 // ---- Exercises after the build has turned their Markdown into HTML ----
 // Fields ending in Html are trusted HTML produced at build time from our own content.
 
@@ -87,7 +135,45 @@ export interface ClozeExercise {
   explainHtml: string;
 }
 
-export type Exercise = PredictExercise | ChoiceExercise | ClozeExercise;
+export interface EditExercise {
+  type: "edit";
+  id: string;
+  goalHtml: string;
+  code: string;
+  check: string;
+  solution: string;
+  explainHtml: string;
+}
+
+export interface FixExercise {
+  type: "fix";
+  id: string;
+  symptomHtml?: string;
+  code: string;
+  check: string;
+  solution: string;
+  cause: { options: { id: string; html: string }[]; answer: string };
+  explainHtml: string;
+}
+
+export interface TracebackExercise {
+  type: "traceback";
+  id: string;
+  code: string;
+  traceback: string; // filled in by the build, from really running the code
+  questionHtml: string;
+  options: { id: string; html: string }[];
+  answer: string;
+  explainHtml: string;
+}
+
+export type Exercise =
+  | PredictExercise
+  | ChoiceExercise
+  | ClozeExercise
+  | EditExercise
+  | FixExercise
+  | TracebackExercise;
 export type ExerciseType = Exercise["type"];
 
 // ---- Lessons, modules and the course ----
