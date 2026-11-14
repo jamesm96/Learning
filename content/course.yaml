@@ -5,16 +5,8 @@ title: Code Literacy
 modules:
   - folder: 00-start
   - folder: 01-data
-  - planned:
-      id: structure
-      label: Module 2
-      title: Structure
-      summary: Functions, modules and classes.
-  - planned:
-      id: debugging
-      label: Module 3
-      title: Debugging
-      summary: Finding out what is true.
+  - folder: 02-structure
+  - folder: 03-debugging
   - planned:
       id: git
       label: Module 4
