@@ -29,6 +29,7 @@ const course: Course = {
   title: "Test",
   files: {},
     selfTest: [],
+    practice: { drills: [], bugHunt: [] },
   planned: [],
   modules: [
     { id: "start", label: "Start", title: "Start", summary: "", lessons: [lesson("start-01", 3)], checkHtml: [], apply: [], prompts: [] },

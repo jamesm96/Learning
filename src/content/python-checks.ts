@@ -7,6 +7,7 @@
 
 import { compareOutput } from "../grading/compare-output.ts";
 import type { RunPython, RunResult } from "../python/types.ts";
+import { practiceAsModule } from "./load-course.ts";
 import type { Course, Exercise } from "./schema.ts";
 
 /** Check every exercise that runs code. Fills in traceback text. Returns a list of problems (empty when all is well). */
@@ -14,7 +15,7 @@ export async function checkWithPython(course: Course, runInFolder: RunPython): P
   const problems: string[] = [];
   // Every run gets the course's sample files, as on the phone.
   const run: RunPython = (code, check, files) => runInFolder(code, check, { ...course.files, ...files });
-  for (const module of course.modules) {
+  for (const module of [...course.modules, practiceAsModule(course.practice)]) {
     for (const lesson of module.lessons) {
       for (const [index, step] of lesson.steps.entries()) {
         const where = `${lesson.id} step ${index + 1}`;

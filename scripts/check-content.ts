@@ -20,6 +20,13 @@ for (const module of course.modules) {
   }
 }
 
+for (const [name, files] of [["drills", course.practice.drills], ["bug hunt", course.practice.bugHunt]] as const) {
+  for (const file of files) {
+    exercises += file.steps.length;
+    console.log(`${file.id.padEnd(17)} ${String(file.steps.length).padStart(2)} ${name} exercises  ${file.title}`);
+  }
+}
+
 if (problems.length > 0) {
   console.error(`\n${problems.length} problem(s):\n\n${problems.join("\n\n")}`);
   process.exit(1);

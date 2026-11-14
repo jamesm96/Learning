@@ -29,7 +29,14 @@ export function loadCourse(read: ReadContentFile): Course {
     if (module) modules.push(module);
   }
 
-  problems.push(...findDuplicateIds(modules));
+  const practice = {
+    drills: loadPractice(courseData.data.practice.drills, read, problems, () => null),
+    bugHunt: loadPractice(courseData.data.practice.bugHunt, read, problems, (step) =>
+      step.kind === "exercise" && step.exercise.type === "fix" ? null : "the bug hunt holds only fix exercises",
+    ),
+  };
+
+  problems.push(...findDuplicateIds([...modules, practiceAsModule(practice)]));
 
   if (problems.length > 0) {
     throw new ContentError(`Content has ${problems.length} problem(s):\n\n${problems.join("\n\n")}`);
@@ -38,7 +45,7 @@ export function loadCourse(read: ReadContentFile): Course {
   for (const name of courseData.data.files) {
     files[name] = read(`files/${name}`).replace(/\r\n/g, "\n");
   }
-  return { title: courseData.data.title, files, selfTest: courseData.data.selfTest, modules, planned };
+  return { title: courseData.data.title, files, selfTest: courseData.data.selfTest, practice, modules, planned };
 }
 
 /** Load one module folder. Problems are added to the list rather than thrown, so all are reported at once. */
@@ -71,6 +78,47 @@ function loadModule(folder: string, read: ReadContentFile, problems: string[]): 
     bridgeHtml: source.bridge === undefined ? undefined : markdownToHtml(source.bridge),
     apply: (source.apply ?? []).map((task) => ({ id: task.id, tier: task.tier, html: inlineMarkdownToHtml(task.text) })),
     prompts: source.prompts ?? [],
+  };
+}
+
+/**
+ * Load practice bank files. Every step must be an exercise, with no reading steps or recap,
+ * and `rule` can refuse a step (it returns a problem, or null when the step is fine).
+ */
+function loadPractice(
+  files: string[],
+  read: ReadContentFile,
+  problems: string[],
+  rule: (step: Lesson["steps"][number]) => string | null,
+): Lesson[] {
+  const lessons: Lesson[] = [];
+  for (const file of files) {
+    try {
+      const lesson = parseLesson(read(`practice/${file}`));
+      lesson.steps.forEach((step, index) => {
+        if (step.kind !== "exercise") throw new ContentError(`step ${index + 1}: practice files hold only exercises`);
+        const problem = rule(step);
+        if (problem) throw new ContentError(`step ${index + 1}: ${problem}`);
+      });
+      lessons.push(lesson);
+    } catch (error) {
+      problems.push(`practice/${file}: ${(error as Error).message}`);
+    }
+  }
+  return lessons;
+}
+
+/** The practice banks wrapped as a module, so the same id and Python checks cover them. */
+export function practiceAsModule(practice: Course["practice"]): Module {
+  return {
+    id: "practice",
+    label: "Practice",
+    title: "Practice",
+    summary: "",
+    lessons: [...practice.drills, ...practice.bugHunt],
+    checkHtml: [],
+    apply: [],
+    prompts: [],
   };
 }
 

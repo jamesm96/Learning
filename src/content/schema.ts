@@ -375,6 +375,13 @@ export const courseSource = z.strictObject({
   title: z.string().min(1),
   files: z.array(z.string().min(1)).default([]), // sample files in content/files/, present whenever code runs
   selfTest: z.array(z.strictObject({ id, text: z.string().min(1) })).default([]), // "You are code-literate when you can..."
+  // Practice banks in content/practice/: files in the lesson format, one exercise per step.
+  practice: z
+    .strictObject({
+      drills: z.array(z.string().min(1)).default([]), // one file per topic
+      bugHunt: z.array(z.string().min(1)).default([]), // fix exercises, one file per level, easiest first
+    })
+    .default({ drills: [], bugHunt: [] }),
   modules: z
     .array(
       z.union([
@@ -397,6 +404,7 @@ export interface Course {
   title: string;
   files: Record<string, string>; // sample files, written into the working folder before every run
   selfTest: { id: string; text: string }[];
+  practice: { drills: Lesson[]; bugHunt: Lesson[] };
   modules: Module[];
   planned: PlannedModule[];
 }

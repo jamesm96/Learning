@@ -106,6 +106,14 @@ Commands the simulator knows: `status`, `diff`, `diff --staged`, `add <file>`, `
 `stash`, `stash pop`, `log`. Merges that conflict stop with an explanation. There is no remote, so no
 `push` or `pull`.
 
+## Practice banks
+
+`practice/drills/<topic>.md` and `practice/bug-hunt/<level>.md` use the lesson file format
+(frontmatter `id`, `title`, `minutes`), but every step is a single exercise: no reading steps
+and no `recap`. A drill session picks five exercises at random from a topic. Bug hunt files hold
+only `fix` exercises, one file per level (easy, medium, hard), and list them in `course.yaml`
+easiest first. Every runnable exercise is checked in Python exactly as in lessons.
+
 ## Module files
 
 ```yaml
