@@ -1,0 +1,10 @@
+id: start
+label: Start
+title: What you are training
+summary: Setup and habits.
+intro: |
+  Writing code is getting cheap. Knowing whether code is right is getting more valuable. Every lesson here trains the second skill: you read real code, predict what it does, find what is wrong with it, and decide how it should be organised.
+
+lessons:
+  - 01-how-to-use-this.md
+  - 02-set-up-and-pace.md

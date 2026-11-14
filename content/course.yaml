@@ -1,0 +1,32 @@
+# The order of the course. Each entry is a folder under modules/,
+# or a "planned" module that appears on the course map but is not written yet.
+title: Code Literacy
+
+modules:
+  - folder: 00-start
+  - folder: 01-data
+  - planned:
+      id: structure
+      label: Module 2
+      title: Structure
+      summary: Functions, modules and classes.
+  - planned:
+      id: debugging
+      label: Module 3
+      title: Debugging
+      summary: Finding out what is true.
+  - planned:
+      id: git
+      label: Module 4
+      title: Git
+      summary: Undo, history and review.
+  - planned:
+      id: io
+      label: Module 5
+      title: Data in and out
+      summary: Files, formats and other programs.
+  - planned:
+      id: next
+      label: What next
+      title: Capstone and beyond
+      summary: One pipeline end to end, a schedule, and where this leads.
