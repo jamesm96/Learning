@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { lessonHash, moduleHash, parseRoute } from "./routes";
+import { isPracticeRoute, lessonHash, moduleHash, parseRoute } from "./routes";
 
 describe("parseRoute", () => {
   it("reads a plain tab", () => {
@@ -21,5 +21,20 @@ describe("parseRoute", () => {
   it("round-trips the link builders", () => {
     expect(parseRoute(lessonHash("data", "data-01"))).toMatchObject({ moduleId: "data", lessonId: "data-01" });
     expect(parseRoute(moduleHash("start"))).toMatchObject({ moduleId: "start", lessonId: undefined });
+  });
+});
+
+describe("review sessions and practice time", () => {
+  it("reads a review session", () => {
+    expect(parseRoute("#/today/review")).toEqual({ tab: "today", review: true });
+    expect(parseRoute("#/today/review/5")).toEqual({ tab: "today", review: true, reviewLimit: 5 });
+  });
+
+  it("counts lessons, review and the Scratchpad as practice, but not menus", () => {
+    expect(isPracticeRoute("#/learn/data/data-01")).toBe(true);
+    expect(isPracticeRoute("#/today/review")).toBe(true);
+    expect(isPracticeRoute("#/practice")).toBe(true);
+    expect(isPracticeRoute("#/learn/data")).toBe(false);
+    expect(isPracticeRoute("#/me")).toBe(false);
   });
 });

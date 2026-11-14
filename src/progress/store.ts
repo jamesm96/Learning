@@ -20,6 +20,22 @@ export function updateProgress(change: (progress: Progress) => Progress): void {
   saveProgress(current).catch((error: unknown) => console.error("Could not save progress", error));
 }
 
+/** The current progress, for code outside components. */
+export function getProgress(): Progress {
+  return current;
+}
+
+/** Call `listener` after every change. Returns a function that stops listening. */
+export function onProgressChange(listener: (progress: Progress) => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+/** Replace all progress, for example from a backup. */
+export function replaceProgress(next: Progress): void {
+  updateProgress(() => next);
+}
+
 /** The current progress. The component re-renders whenever it changes. */
 export function useProgress(): Progress {
   const [progress, setProgress] = useState(current);
