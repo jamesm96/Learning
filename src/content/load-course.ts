@@ -38,7 +38,7 @@ export function loadCourse(read: ReadContentFile): Course {
   for (const name of courseData.data.files) {
     files[name] = read(`files/${name}`).replace(/\r\n/g, "\n");
   }
-  return { title: courseData.data.title, files, modules, planned };
+  return { title: courseData.data.title, files, selfTest: courseData.data.selfTest, modules, planned };
 }
 
 /** Load one module folder. Problems are added to the list rather than thrown, so all are reported at once. */

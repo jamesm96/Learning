@@ -22,6 +22,7 @@ function courseWith(steps: Step[]): Course {
     title: "Test",
     planned: [],
     files: {},
+    selfTest: [],
     modules: [{ id: "m", label: "M", title: "M", summary: "", checkHtml: [], apply: [], prompts: [], lessons: [{ id: "l", title: "L", minutes: 1, steps }] }],
   };
 }

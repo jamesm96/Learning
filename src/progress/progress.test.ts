@@ -28,6 +28,7 @@ const lesson = (id: string, stepCount: number): Lesson => ({
 const course: Course = {
   title: "Test",
   files: {},
+    selfTest: [],
   planned: [],
   modules: [
     { id: "start", label: "Start", title: "Start", summary: "", lessons: [lesson("start-01", 3)], checkHtml: [], apply: [], prompts: [] },

@@ -11,6 +11,16 @@ files:
   - products.csv
   - sensors.csv
 
+# The self-test on the Me tab: "You are code-literate when you can..."
+selfTest:
+  - { id: read-function, text: "Read any function Claude writes and say what it does in a sentence" }
+  - { id: data-shape, text: "Describe the shape of any JSON data and write the path to a value in it" }
+  - { id: traceback, text: "Read a traceback and name the likely cause before asking for help" }
+  - { id: diff, text: "Read a diff and spot a change that was not asked for" }
+  - { id: structure, text: "Explain why a file is structured the way it is, and propose a better split" }
+  - { id: fifty-lines, text: "Write a fifty-line tool with no AI help: read a file, transform data, write a result" }
+  - { id: walk-through, text: "Walk an engineer through one of your tools and answer their questions" }
+
 modules:
   - folder: 00-start
   - folder: 01-data

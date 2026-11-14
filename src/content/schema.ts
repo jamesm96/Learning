@@ -374,6 +374,7 @@ export interface Module {
 export const courseSource = z.strictObject({
   title: z.string().min(1),
   files: z.array(z.string().min(1)).default([]), // sample files in content/files/, present whenever code runs
+  selfTest: z.array(z.strictObject({ id, text: z.string().min(1) })).default([]), // "You are code-literate when you can..."
   modules: z
     .array(
       z.union([
@@ -395,6 +396,7 @@ export interface PlannedModule {
 export interface Course {
   title: string;
   files: Record<string, string>; // sample files, written into the working folder before every run
+  selfTest: { id: string; text: string }[];
   modules: Module[];
   planned: PlannedModule[];
 }
