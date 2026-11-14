@@ -39,6 +39,20 @@ for (const module of course.modules) {
   }
 }
 
+/** The practice banks, labelled so a card can say where it came from ("Drill · Data shapes"). */
+function bankModule(id: string, label: string, lessons: Lesson[]): Module {
+  return { id, label, title: label, summary: "", lessons, checkHtml: [], apply: [], prompts: [] };
+}
+const drillsModule = bankModule("drills", "Drill", course.practice.drills);
+const bugHuntModule = bankModule("bug-hunt", "Bug hunt", course.practice.bugHunt);
+for (const module of [drillsModule, bugHuntModule]) {
+  for (const lesson of module.lessons) {
+    for (const step of lesson.steps) {
+      if (step.kind === "exercise") exercisesById.set(step.exercise.id, { exercise: step.exercise, lesson, module });
+    }
+  }
+}
+
 /** Find an exercise anywhere in the course. */
 export function findExercise(id: string): ExerciseLocation | undefined {
   return exercisesById.get(id);

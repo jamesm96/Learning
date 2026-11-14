@@ -5,6 +5,7 @@ import { TabBar } from "./components/TabBar";
 import { KeyboardBar } from "./editor/KeyboardBar";
 import { LessonPlayer } from "./lesson/LessonPlayer";
 import { ReviewSession } from "./review/ReviewSession";
+import { BugSession, DrillSession } from "./review/PracticeSessions";
 import { TodayScreen } from "./screens/Today";
 import { LearnScreen } from "./screens/Learn";
 import { ModuleScreen } from "./screens/ModuleScreen";
@@ -30,12 +31,21 @@ export function App() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [route.tab, route.moduleId, route.lessonId, route.review]);
+  }, [route.tab, route.moduleId, route.lessonId, route.review, route.drill, route.bug]);
 
   if (route.review) {
     return (
       <main class="screen screen-lesson" id="main">
         <ReviewSession key={route.reviewLimit ?? "all"} limit={route.reviewLimit} />
+        <KeyboardBar />
+      </main>
+    );
+  }
+
+  if (route.drill || route.bug) {
+    return (
+      <main class="screen screen-lesson" id="main">
+        {route.drill ? <DrillSession key={route.drill} topicId={route.drill} /> : <BugSession key={route.bug} exerciseId={route.bug!} />}
         <KeyboardBar />
       </main>
     );

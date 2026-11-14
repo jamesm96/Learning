@@ -241,3 +241,14 @@ details.apply-group summary {
   border-left: 3px solid var(--apply, #a8500c);
   padding-left: 12px;
 }
+
+/* ---- Practice lists ---- */
+
+.practice-list,
+.panel ul.practice-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+  border-top: 1px solid var(--line);
+}

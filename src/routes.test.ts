@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isPracticeRoute, lessonHash, moduleHash, parseRoute } from "./routes";
+import { bugHash, drillHash, isPracticeRoute, lessonHash, moduleHash, parseRoute } from "./routes";
 
 describe("parseRoute", () => {
   it("reads a plain tab", () => {
@@ -36,5 +36,13 @@ describe("review sessions and practice time", () => {
     expect(isPracticeRoute("#/practice")).toBe(true);
     expect(isPracticeRoute("#/learn/data")).toBe(false);
     expect(isPracticeRoute("#/me")).toBe(false);
+  });
+});
+
+describe("practice routes", () => {
+  it("reads drill sessions and bug-hunt snippets", () => {
+    expect(parseRoute(drillHash("drills-data"))).toEqual({ tab: "practice", drill: "drills-data" });
+    expect(parseRoute(bugHash("bug-hunt-easy-x"))).toEqual({ tab: "practice", bug: "bug-hunt-easy-x" });
+    expect(parseRoute("#/practice")).toEqual({ tab: "practice" });
   });
 });

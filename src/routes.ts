@@ -4,6 +4,7 @@
 //   #/learn/data         a module
 //   #/learn/data/data-04 a lesson
 //   #/today/review       a review session
+//   #/practice/drills/x  a drill session, #/practice/bugs/x one bug-hunt snippet
 
 import { tabFromHash, type TabId } from "./tabs";
 
@@ -13,6 +14,8 @@ export interface Route {
   lessonId?: string;
   review?: boolean; // #/today/review: a review session
   reviewLimit?: number; // #/today/review/5: at most this many cards
+  drill?: string; // #/practice/drills/drills-data: a drill session on one topic
+  bug?: string; // #/practice/bugs/bug-hunt-easy-get-default: one bug-hunt snippet
 }
 
 /** Read the full route from a URL hash. Extra parts are only used on the Learn tab. */
@@ -20,6 +23,11 @@ export function parseRoute(hash: string): Route {
   const tab = tabFromHash(hash);
   const review = /^#\/?today\/review(?:\/(\d+))?/.exec(hash);
   if (tab === "today" && review) return review[1] ? { tab, review: true, reviewLimit: Number(review[1]) } : { tab, review: true };
+  if (tab === "practice") {
+    const [, kind, id] = hash.replace(/^#\/?/, "").split("/");
+    if (kind === "drills" && id) return { tab, drill: id };
+    if (kind === "bugs" && id) return { tab, bug: id };
+  }
   if (tab !== "learn") return { tab };
 
   const [, moduleId, lessonId] = hash.replace(/^#\/?/, "").split("/");
@@ -39,6 +47,16 @@ export function isPracticeRoute(hash: string): boolean {
 /** Link to a review session, optionally limited to a number of cards. */
 export function reviewHash(limit?: number): string {
   return limit ? `#/today/review/${limit}` : "#/today/review";
+}
+
+/** Link to a drill session on one topic. */
+export function drillHash(topicId: string): string {
+  return `#/practice/drills/${topicId}`;
+}
+
+/** Link to one bug-hunt snippet. */
+export function bugHash(exerciseId: string): string {
+  return `#/practice/bugs/${exerciseId}`;
 }
 
 /** Link to a module's page. */

@@ -205,25 +205,6 @@ select {
   cursor: not-allowed;
 }
 
-/* ---- Placeholders (phase 0 only) ---- */
-
-.placeholder {
-  border-left: 3px solid var(--line);
-  padding: 4px 0 4px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.placeholder p {
-  color: var(--muted);
-}
-
-.placeholder-phase {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-}
-
 .app-version {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
