@@ -7,6 +7,7 @@ import "./styles/tokens.css";
 import "./styles/base.css";
 import "./styles/content.css";
 import "./styles/lesson.css";
+import "./styles/code.css";
 
 // Register the service worker so the app installs and works offline.
 // New versions activate on the next launch.

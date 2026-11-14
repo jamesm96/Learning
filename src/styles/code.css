@@ -1,0 +1,385 @@
+/* Code: syntax colours, the editor, the coding keyboard bar, running and output. */
+
+/* ---- Syntax colours (class names come from @lezer/highlight's classHighlighter) ---- */
+
+.tok-keyword,
+.tok-operatorKeyword,
+.tok-controlKeyword,
+.tok-definitionKeyword,
+.tok-moduleKeyword {
+  color: var(--tok-keyword);
+}
+
+.tok-string,
+.tok-string2,
+.tok-special {
+  color: var(--tok-string);
+}
+
+.tok-comment {
+  color: var(--tok-comment);
+  font-style: italic;
+}
+
+.tok-number,
+.tok-bool,
+.tok-atom {
+  color: var(--tok-number);
+}
+
+.tok-definition,
+.tok-className,
+.tok-typeName {
+  color: var(--tok-definition);
+}
+
+/* ---- Line numbers in read-only code (drawn by CSS, so they are not copied) ---- */
+
+pre.has-line-numbers code {
+  counter-reset: line;
+}
+
+pre.has-line-numbers .code-line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2ch;
+  margin-right: 1.5ch;
+  text-align: right;
+  color: var(--muted);
+  user-select: none;
+}
+
+/* ---- Editor ---- */
+
+.editor .cm-editor {
+  background: var(--code-bg);
+  border-left: 3px solid var(--accent);
+  font-size: 16px; /* 16px or more stops iOS zooming in when the editor is tapped */
+  color: var(--ink);
+}
+
+.editor .cm-editor.cm-focused {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+.editor .cm-scroller {
+  font-family: var(--font-mono);
+  line-height: 1.5;
+}
+
+.editor .cm-content {
+  padding: 10px 0;
+  caret-color: var(--accent);
+}
+
+.editor .cm-cursor {
+  border-left-color: var(--accent);
+  border-left-width: 2px;
+}
+
+.editor .cm-gutters {
+  background: var(--code-bg);
+  color: var(--muted);
+  border-right: 1px solid var(--line);
+}
+
+.editor .cm-activeLine,
+.editor .cm-activeLineGutter {
+  background: transparent;
+}
+
+.editor .cm-selectionBackground,
+.editor .cm-focused .cm-selectionBackground {
+  background: color-mix(in srgb, var(--accent) 30%, transparent) !important;
+}
+
+/* Text inputs for code, such as a typed prediction. */
+.code-input {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.code-input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* ---- Coding keyboard bar ---- */
+
+.keyboard-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  padding: 6px calc(env(safe-area-inset-right) + 6px) 6px calc(env(safe-area-inset-left) + 6px);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+.keyboard-keys {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.kb-key {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 10px;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  font: 600 1rem var(--font-mono);
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.kb-run {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-body);
+}
+
+/* While an editor has focus, the bottom bars make way for the keyboard bar. */
+body.is-editing .player-actions,
+body.is-editing .tabbar,
+body.is-editing .primary-action {
+  display: none;
+}
+
+/* ---- Running code ---- */
+
+.run-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.button-run {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  padding: 0 18px;
+  background: var(--accent);
+  border: 0;
+  border-radius: 6px;
+  color: var(--accent-ink);
+  font: 600 1rem var(--font-body);
+  cursor: pointer;
+}
+
+.button-run svg {
+  fill: currentColor;
+}
+
+.button-run:disabled {
+  background: var(--line);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+pre.code.is-output {
+  border-left-color: var(--muted);
+}
+
+.run-output,
+.playground,
+.code-task {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.run-note {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.python-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.progress-track.is-indeterminate .progress-fill {
+  width: 30%;
+  animation: indeterminate 1.2s ease-in-out infinite;
+}
+
+@keyframes indeterminate {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(340%);
+  }
+}
+
+.task-verdict {
+  font-weight: 600;
+}
+
+.is-wrong-mark {
+  color: var(--bad);
+}
+
+/* ---- Prediction against real output ---- */
+
+.output-diff {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.diff-lines {
+  list-style: none;
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--code-bg);
+  border-left: 3px solid var(--muted);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+}
+
+.diff-lines li {
+  white-space: pre;
+}
+
+.diff-lines li.is-different {
+  border-left: 3px solid var(--bad);
+  margin-left: -14px;
+  padding-left: 11px;
+}
+
+.diff-yours {
+  display: block;
+  color: var(--muted);
+}
+
+.diff-label {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+}
+
+.diff-yours mark {
+  background: var(--mark-bg);
+  color: var(--ink);
+  text-decoration: underline wavy var(--bad);
+  text-underline-offset: 3px;
+}
+
+/* ---- Traceback ---- */
+
+.traceback {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--code-bg);
+  padding: 10px;
+  overflow-x: auto;
+}
+
+.traceback pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  white-space: pre;
+}
+
+.tb-line {
+  padding: 0 4px;
+}
+
+.tb-exception {
+  font-weight: 700;
+}
+
+.tb-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: var(--tap);
+  width: max-content;
+  min-width: 100%;
+  padding: 6px 4px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.tb-frame:disabled {
+  cursor: default;
+}
+
+.tb-frame.is-answer {
+  border-color: var(--good);
+  border-width: 2px;
+}
+
+.tb-frame.is-wrong {
+  border-color: var(--bad);
+  border-style: dashed;
+  border-width: 2px;
+}
+
+.tb-frame.is-answer .option-note {
+  color: var(--good);
+}
+
+.tb-frame.is-wrong .option-note {
+  color: var(--bad);
+}
+
+fieldset.cause-question {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+fieldset.cause-question legend {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
