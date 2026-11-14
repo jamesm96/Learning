@@ -6,6 +6,7 @@ import {
   lessonScore,
   lessonState,
   migrate,
+  saveExplanation,
   moduleCounts,
   nextStop,
   recordAnswer,
@@ -90,6 +91,14 @@ describe("lesson progress", () => {
   });
 });
 
+describe("saveExplanation", () => {
+  it("keeps the latest text for a lesson", () => {
+    let progress = saveExplanation(emptyProgress(), "data-01", "First go.", monday);
+    progress = saveExplanation(progress, "data-01", "Second go.", tuesday);
+    expect(progress.explanations["data-01"]).toEqual({ text: "Second go.", savedAt: tuesday.toISOString() });
+  });
+});
+
 describe("lessonScore", () => {
   const quiz: Lesson = {
     id: "quiz",
@@ -145,6 +154,15 @@ describe("migrate", () => {
   it("keeps current-version data as it is", () => {
     const stored = completeLesson(emptyProgress(), "data-01", monday);
     expect(migrate(stored)).toEqual(stored);
+  });
+
+  it("upgrades version 1 progress, keeping every lesson and answer", () => {
+    const v1 = {
+      version: 1,
+      lessons: { "data-01": { step: 0, completedAt: monday.toISOString() } },
+      answers: { "q-1": { attempts: 1, firstTryCorrect: true, lastCorrect: true, lastAnsweredAt: monday.toISOString() } },
+    };
+    expect(migrate(v1)).toEqual({ version: 2, lessons: v1.lessons, answers: v1.answers, explanations: {} });
   });
 
   it("refuses data from a newer version rather than overwriting it", () => {

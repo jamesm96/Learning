@@ -5,7 +5,7 @@
 import type { Course, Lesson, Module } from "../content/schema";
 
 /** Bump this when the stored shape changes, and add a step to migrate(). */
-export const PROGRESS_VERSION = 1;
+export const PROGRESS_VERSION = 2;
 
 export interface LessonProgress {
   step: number; // index of the step to resume at
@@ -19,17 +19,24 @@ export interface AnswerRecord {
   lastAnsweredAt: string; // ISO date
 }
 
+/** What the learner wrote in "Explain it back" at the end of a lesson. Never graded. */
+export interface Explanation {
+  text: string;
+  savedAt: string; // ISO date
+}
+
 export interface Progress {
   version: typeof PROGRESS_VERSION;
   lessons: Record<string, LessonProgress>;
   answers: Record<string, AnswerRecord>;
+  explanations: Record<string, Explanation>; // by lesson id (added in version 2)
 }
 
 export type LessonState = "new" | "started" | "done";
 
 /** Progress for someone who has not started. */
 export function emptyProgress(): Progress {
-  return { version: PROGRESS_VERSION, lessons: {}, answers: {} };
+  return { version: PROGRESS_VERSION, lessons: {}, answers: {}, explanations: {} };
 }
 
 /** Record one answer to an exercise. The first attempt is kept separately, because that is the honest score. */
@@ -42,6 +49,11 @@ export function recordAnswer(progress: Progress, exerciseId: string, correct: bo
     lastAnsweredAt: now.toISOString(),
   };
   return { ...progress, answers: { ...progress.answers, [exerciseId]: record } };
+}
+
+/** Save what the learner wrote for a lesson's "Explain it back". */
+export function saveExplanation(progress: Progress, lessonId: string, text: string, now: Date): Progress {
+  return { ...progress, explanations: { ...progress.explanations, [lessonId]: { text, savedAt: now.toISOString() } } };
 }
 
 /** Remember which step of a lesson to come back to. */
@@ -113,6 +125,11 @@ export function nextStop(progress: Progress, course: Course): NextStop | null {
   return null;
 }
 
+/** Version 2 added saved explanations. Everything from version 1 is kept as it was. */
+function migrateV1toV2(data: Record<string, unknown>): Record<string, unknown> {
+  return { ...data, version: 2, explanations: {} };
+}
+
 /** Thrown when stored progress cannot be read. The caller must keep the raw data, never discard it. */
 export class UnreadableProgressError extends Error {}
 
@@ -122,18 +139,20 @@ export function migrate(stored: unknown): Progress {
   if (typeof stored !== "object" || !("version" in stored)) {
     throw new UnreadableProgressError("stored progress has no version number");
   }
-  const version = stored.version;
+  let data = stored as Record<string, unknown>;
 
-  // Future migrations go here, one version at a time, for example:
-  // if (version === 1) stored = migrateV1toV2(stored);
+  // One step per version, oldest first, so data from any earlier version is brought fully up to date.
+  if (data.version === 1) data = migrateV1toV2(data);
 
-  if (version === PROGRESS_VERSION) {
-    const data = stored as Partial<Progress>;
+  if (data.version === PROGRESS_VERSION) {
+    const current = data as Partial<Progress>;
     return {
       version: PROGRESS_VERSION,
-      lessons: data.lessons ?? {},
-      answers: data.answers ?? {},
+      lessons: current.lessons ?? {},
+      answers: current.answers ?? {},
+      explanations: current.explanations ?? {},
     };
   }
+  const version = data.version;
   throw new UnreadableProgressError(`stored progress is version ${String(version)}, newer than this app understands`);
 }
