@@ -105,3 +105,29 @@ One short entry per significant choice: what, why, and what was rejected.
 ## 23. Modules 2 and 3 were drafted by helper agents
 - **What:** two Claude sub-agents wrote the Module 2 and 3 lessons in parallel from the course page, to the same format and rules, while the app code was built. Every exercise passes the build-time Python checks, and the lessons were reviewed afterwards.
 - **Why:** it halved the time for the longest part of the phase. The format and the checks make it safe to split the work.
+
+## 24. A Git simulator, not real Git
+- **What:** `src/git/simulator.ts` models a working folder, staging, commits, branches, merges and the stash as plain data. Every command returns a new repository plus the text Git would print. It has unit tests, and every Git exercise's solution is replayed through it at build time.
+- **Why:** real Git cannot run on the phone, and a small model makes the three places (working folder, staging, history) visible after every command.
+- **Limits, on purpose:** no remote (`push`, `pull`); a merge that conflicts stops with an explanation; switching branches is refused when uncommitted edits would be overwritten, as Git does.
+
+## 25. Reorder lines uses tap-then-move, not drag
+- **What:** tap a line to pick it, then move it up or down and change its indent with four large buttons.
+- **Why:** dragging small rows is fiddly on a phone and does not work with a screen reader. The result is still checked by really running it.
+
+## 26. Every run gets a fresh folder of sample files
+- **What:** before each run, the harness empties `/home/pyodide/work`, writes the sample files listed in `content/course.yaml` (plus any an exercise adds) and makes it the current folder.
+- **Why:** file exercises in Module 5, and the Scratchpad, can read and write real files, and one run can never leave a mess for the next.
+
+## 27. A clearly labelled stand-in for `requests`
+- **What:** `from simulated import requests` gives canned replies for a shop, a weather service and a local ComfyUI server (`src/python/simulated.py`).
+- **Why:** no network calls at runtime, and the same result every time, offline. Lessons say it is a simulation, and that the real library uses the same calls.
+
+## 28. Progress version 2: written explanations
+- **What:** "Explain it back" text is saved per lesson under `explanations`. Stored version 1 progress is upgraded by `migrateV1toV2`, which keeps everything and adds an empty `explanations`.
+- **Why:** the first real migration, done the way every later one will be: one step per version, tested, and never dropping data.
+
+## 29. Diff reviews are marked line by line, with before/after pairs
+- **What:** you flag individual changed lines. Each removed line is paired with the most similar added line next to it (its "after"). Flagging either half of a pair counts for both. A lesson may list either half, or both.
+- **Why:** reviewers think in edits ("this change was not asked for"), but an unwanted edit often sits right next to a wanted one, so grouping whole runs of changes would force you to flag wanted lines too.
+- **Rejected:** exact line matching (two lesson authors listed pairs differently, so the same mistake was graded differently); grouping by runs of changes (too coarse, see above).

@@ -7,7 +7,7 @@ It is a Progressive Web App: a website that installs to your home screen, opens
 full-screen like an app, and works offline. There are no accounts and no server.
 Your progress stays on your device.
 
-**Status:** phase 2. Start and Modules 1 to 3 are playable. Code runs in real Python (Pyodide) on the phone, with predict, edit-and-run, fix-the-bug and read-the-traceback exercises, and a Scratchpad.
+**Status:** phase 3. The whole course is playable: Start, Modules 1 to 5 and What next, with all twelve exercise types, a Git simulator, real files for Module 5, and "explain it back" at the end of every lesson.
 
 ## Install it on your phone
 
@@ -50,30 +50,8 @@ The first time you run `npm run e2e`, install the test browsers with
 
 ## Writing lessons
 
-Each lesson is a Markdown file with a short YAML header. Steps are separated by a
-line containing only `---`. An exercise is a fenced block:
-
-````markdown
-```exercise choice
-id: data-01-join-strings
-question: 'What does `"12" + "3"` give you?'
-options:
-  - { id: fifteen, text: "15" }
-  - { id: joined, text: '"123"' }
-answer: joined
-explain: Both sides are strings, so `+` joins them.
-```
-````
-
-Exercise types: `predict`, `choice`, `cloze`, `edit`, `fix` and `traceback`. The
-full rules are in `src/content/schema.ts`. To show a traceback in lesson text, put
-the failing Python code in a fenced block labelled `traceback`; the build runs it
-and shows the real traceback.
-
-`npm run check:content` checks everything and runs every runnable exercise in real
-Python: stored outputs must match, and edit and fix exercises must fail before and
-pass after. The build runs the same checks and stops on any problem. In YAML, put
-quotes around option text that contains a comma or starts with a backtick.
+See [content/README.md](content/README.md): the lesson format, every exercise type,
+the sample files and the Git scenario format. `npm run check:content` checks it all.
 
 ## How it is deployed
 
@@ -97,6 +75,7 @@ src/
   grading/          marking answers, comparing output, reading tracebacks (pure, tested)
   python/           running Python: the harness, the Web Worker and the page-side runner
   editor/           the code editor and the coding keyboard bar
+  git/              the Git simulator (pure, tested)
   lesson/           the lesson player
   exercises/        one component per exercise type
   screens/          one file per screen
