@@ -1,0 +1,61 @@
+id: structure
+label: Module 2
+title: Structure
+summary: Functions, modules and classes.
+intro: |
+  AI produces code faster than anyone can read it. What keeps a tool alive after month three is how it is organised: small named pieces, clear boundaries, one place for each decision. This is design judgement, and you already have it from building art pipelines. This module gives you the vocabulary to apply it to code.
+
+lessons:
+  - 01-functions.md
+  - 02-scope.md
+  - 03-good-functions.md
+  - 04-modules.md
+  - 05-classes.md
+  - 06-type-hints.md
+
+check:
+  - "Can you say what each function does in one sentence with no \"and\"?"
+  - "Is any function longer than a screen? What second job is inside it?"
+  - "Is the same logic written out in two places?"
+  - "Do the rules and maths import the host application (`bpy`, `unreal`), or are they kept separate?"
+  - "Did it add a class, a base class or a \"manager\" for something used once? Ask for the simpler version."
+  - "Do functions have type hints and a one-line docstring?"
+  - "A prompt for a structure review: *Review the structure of this file as a senior engineer would. List each function with a one-sentence purpose. Flag functions doing more than one job, duplicated logic, and anything that could be tested without the host application if it were moved. Do not rewrite anything yet.*"
+
+bridge: |
+  In C# every function lives inside a class, types are mandatory, and each thing is marked `public` or `private` to say who may use it. The `Asset` class from lesson 5:
+
+  ```csharp
+  public class Asset
+  {
+      public string Name;
+      public int Tris;
+
+      public bool IsOver(int budget)
+      {
+          return Tris > budget;
+      }
+  }
+  ```
+
+  Same data, same method, same idea. `self` is implicit, and `bool` before the method name is the return type that Python writes as `-> bool`. A Unity script is a class that inherits from `MonoBehaviour`, with methods like `Update()` that the engine calls for you.
+
+  | Python | C# |
+  |---|---|
+  | `def is_over(self, budget):` | `public bool IsOver(int budget)` |
+  | `self.tris` | `Tris` (or `this.Tris`) |
+  | `budget: int = 9000` | `int budget = 9000` |
+  | `class Thermometer(Sensor):` | `class Thermometer : Sensor` |
+
+  C++ adds two things: declarations are often split from the code into header files, and you are responsible for who owns each piece of memory. The structural thinking in this module transfers completely. Memory ownership is the new subject you would learn on top.
+
+apply:
+  - id: structure-apply-blender
+    tier: In Blender
+    text: "Take the longest script Claude has written for you. On paper, list the separate jobs it does. Then split it into named functions yourself and confirm it still works."
+  - id: structure-apply-pipeline
+    tier: Pipeline
+    text: "In one of your tools, move every piece of logic that does not need Blender into its own file. Prove it by running that file from a terminal with Blender closed."
+  - id: structure-apply-beyond
+    tier: Beyond games
+    text: "Write a small `naming.py` module with two or three pure functions that validate and build names for any kind of item (assets, product photos, document versions). Give each a type-hinted signature and a docstring."
