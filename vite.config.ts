@@ -1,6 +1,7 @@
 import { defineConfig } from "vitest/config";
 import preact from "@preact/preset-vite";
 import { VitePWA } from "vite-plugin-pwa";
+import { contentPlugin } from "./content-plugin.ts";
 
 // GitHub Pages serves the site from /<repo-name>/, so the deploy workflow
 // sets BASE_PATH. Locally it is "/".
@@ -14,6 +15,7 @@ export default defineConfig({
   },
   plugins: [
     preact(),
+    contentPlugin(),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["icons/icon.svg", "icons/apple-touch-icon.png"],
