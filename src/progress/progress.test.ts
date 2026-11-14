@@ -162,7 +162,23 @@ describe("migrate", () => {
       lessons: { "data-01": { step: 0, completedAt: monday.toISOString() } },
       answers: { "q-1": { attempts: 1, firstTryCorrect: true, lastCorrect: true, lastAnsweredAt: monday.toISOString() } },
     };
-    expect(migrate(v1)).toEqual({ version: 2, lessons: v1.lessons, answers: v1.answers, explanations: {} });
+    const upgraded = migrate(v1, "2026-11-20");
+    expect(upgraded).toMatchObject({ version: 3, lessons: v1.lessons, answers: v1.answers, explanations: {} });
+  });
+
+  it("upgrades version 2 progress, putting answered exercises into review due today", () => {
+    const v2 = {
+      version: 2,
+      lessons: {},
+      answers: { "q-1": { attempts: 1, firstTryCorrect: true, lastCorrect: true, lastAnsweredAt: monday.toISOString() } },
+      explanations: { "data-01": { text: "Types matter.", savedAt: monday.toISOString() } },
+    };
+    const upgraded = migrate(v2, "2026-11-20");
+    expect(upgraded.version).toBe(3);
+    expect(upgraded.explanations).toEqual(v2.explanations);
+    expect(upgraded.review).toEqual({ "q-1": { box: 1, due: "2026-11-20" } });
+    expect(upgraded.settings).toEqual({ theme: "system", haptics: true });
+    expect(upgraded.bugs).toEqual([]);
   });
 
   it("refuses data from a newer version rather than overwriting it", () => {
