@@ -1,0 +1,74 @@
+id: io
+label: Module 5
+title: Data in and out
+summary: Files, formats and other programs.
+intro: |
+  Strip any pipeline down and it is three steps: get data from somewhere, transform it, put it somewhere. An asset export, a ComfyUI batch, a product-image generator for a retailer, a sensor report for a digital twin: all have that outline.
+
+  This module is the "from somewhere" and the "to somewhere": paths, text, JSON, CSV, other programs and web APIs, and checking what arrives before you trust it. Every exercise runs in a working folder with real sample files, so the code really reads and writes. By the end you should be able to write a fifty-line tool on your own that reads a file, transforms the data and writes a result.
+
+lessons:
+  - 01-paths.md
+  - 02-text-files.md
+  - 03-json.md
+  - 04-csv.md
+  - 05-other-programs.md
+  - 06-apis.md
+  - 07-comfyui.md
+  - 08-check-at-the-door.md
+
+check:
+  - "Any hard-coded personal path? Any path built by joining strings with `+`?"
+  - 'Is `encoding="utf-8"` on every file read and write?'
+  - "Does every network call have a timeout and a status check?"
+  - "Is there a key or token written in the code?"
+  - "Can it overwrite or delete source files? Is there a dry run?"
+  - "What happens when item 37 of 200 fails? Is that reported?"
+  - "Is incoming data checked once, where it enters?"
+
+bridge: |
+  | Job | Python | C# | C++ |
+  |---|---|---|---|
+  | Join paths | `Path(a) / b` | `Path.Combine(a, b)` | `std::filesystem::path(a) / b` |
+  | Read text | `p.read_text()` | `File.ReadAllText(p)` | `std::ifstream` |
+  | JSON | `json` | `System.Text.Json`, or `JsonUtility` in Unity | the nlohmann/json library |
+  | Web request | `requests` | `HttpClient` | a library such as cpr |
+
+  In C# and C++ you usually describe the expected shape as a class, and the JSON library fills it in. A reply with the wrong shape is caught at that moment, which is "check data at the door" built into the language.
+
+apply:
+  - id: io-apply-blender
+    tier: In Blender
+    text: "Write a batch exporter that reads a JSON list of asset names, exports each, skips files that already exist, and prints a summary of exported, skipped and failed."
+  - id: io-apply-pipeline
+    tier: Pipeline
+    text: "Install ComfyUI, save a simple workflow in API format, and write a script that queues five variants with different seeds. This closes a gap that shows up in job adverts."
+  - id: io-apply-beyond
+    tier: Beyond games
+    text: "Write a command-line tool that reads a CSV of products (id, name, colour), validates each row, and writes a JSON manifest. This is the shape of product-visualisation pipelines in retail."
+
+prompts:
+  - title: Add validation at the boundary
+    text: |
+      Here is a Python script that reads data from outside (a file, a CSV or an API reply). Add validation at the boundary:
+
+      1. Write one function that checks the data straight after it is loaded, before anything else uses it.
+      2. For every field the rest of the script relies on, check that it is present and has the right type. Raise ValueError with a message that names the item and the problem.
+      3. Do not use .get() with a made-up default for required fields, do not use "if not x" where 0 or an empty string is a valid value, and do not catch broad exceptions.
+      4. List each check you added in one line, and tell me which existing lines assumed clean data.
+
+      Do not change anything else in the script.
+
+      [paste the script here]
+  - title: Review file and network handling
+    text: |
+      Review this script's file and network handling. Do not rewrite it yet; list problems first, one line each, with the line number:
+
+      - hard-coded personal paths, or paths joined with + instead of pathlib
+      - file reads or writes without encoding="utf-8"
+      - network calls without a timeout or raise_for_status()
+      - keys or tokens written in the code
+      - anything that can overwrite or delete source files
+      - what happens when one item in a batch fails, and whether that is reported
+
+      [paste the script here]
