@@ -1,0 +1,45 @@
+id: data
+label: Module 1
+title: Data
+summary: The shapes everything is made of.
+intro: |
+  A scene description, a ComfyUI workflow, a settings file, a reply from an AI model, a product catalogue: all of them are the same two structures nested inside each other, lists and dictionaries. If you can look at data and say its shape, you can read most pipeline code in any industry.
+
+lessons:
+  - 01-values-and-types.md
+  - 02-strings.md
+  - 03-lists.md
+  - 04-dictionaries.md
+  - 05-nesting.md
+  - 06-traps.md
+
+check:
+  - "Can you state the shape of each piece of data it handles? If not, ask it to describe the shape before you read further."
+  - "Where it uses `.get()` with a default, is a missing key normal there, or is it hiding a broken input?"
+  - "Does a function change a list or dict that was passed in? Was that intended?"
+  - "Are numbers that came from text or files converted before any maths?"
+  - "Is `if not x` used on a value where 0 or an empty string is valid?"
+
+bridge: |
+  The structures are identical. The difference is that you must declare types up front, and the compiler refuses to build the program if they don't match. Python finds a type mistake when the line runs. C# and C++ find it before anything runs.
+
+  | Python | C# | C++ |
+  |---|---|---|
+  | `tris = 4820` | `int tris = 4820;` | `int tris = 4820;` |
+  | list | `List<string>` | `std::vector<std::string>` |
+  | dict | `Dictionary<string, int>` | `std::unordered_map<std::string, int>` |
+  | `None` | `null` | `nullptr` |
+  | `f"{name} ok"` | `$"{name} ok"` | `std::format("{} ok", name)` |
+
+  Python lets you add optional type notes, `tris: int = 4820`. They are covered in Module 2 and are the bridge between the two worlds.
+
+apply:
+  - id: data-apply-blender
+    tier: In Blender
+    text: "Write a script that builds a list of dictionaries, one per mesh object in a scene, with its name, triangle count and material names. Print the three heaviest. Write the list-building yourself; ask Claude only for the Blender calls you don't know."
+  - id: data-apply-pipeline
+    tier: Pipeline
+    text: "Open any JSON file a tool has produced (a ComfyUI workflow saved in API format is ideal; any config file works). Write one sentence describing its shape, then write the Python path to three different values in it."
+  - id: data-apply-beyond
+    tier: Beyond games
+    text: "Find the documented example reply for any web API (a weather service, a shop's product feed, an AI model). Describe its shape in a sentence and write the path to the one value a user would care about most."
