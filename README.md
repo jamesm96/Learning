@@ -7,7 +7,7 @@ It is a Progressive Web App: a website that installs to your home screen, opens
 full-screen like an app, and works offline. There are no accounts and no server.
 Your progress stays on your device.
 
-**Status:** phase 3. The whole course is playable: Start, Modules 1 to 5 and What next, with all twelve exercise types, a Git simulator, real files for Module 5, and "explain it back" at the end of every lesson.
+**Status:** phase 4. The whole course, plus daily habit: spaced review on the Today tab, a streak and daily goal, a bug journal, Apply task notes, the self-test, settings, and backup export and import on the Me tab.
 
 ## Install it on your phone
 
@@ -71,7 +71,8 @@ src/
   app.tsx           the shell: current screen plus the tab bar
   tabs.ts, routes.ts  where you are in the app, read from the URL (pure, tested)
   content/          content schema, lesson parser and course loader (pure, tested)
-  progress/         what you have done, and saving it on the device
+  progress/         what you have done, review scheduling, streaks and backups (mostly pure, tested)
+  review/           review sessions and recall cards
   grading/          marking answers, comparing output, reading tracebacks (pure, tested)
   python/           running Python: the harness, the Web Worker and the page-side runner
   editor/           the code editor and the coding keyboard bar

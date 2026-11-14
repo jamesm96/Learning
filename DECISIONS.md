@@ -131,3 +131,22 @@ One short entry per significant choice: what, why, and what was rejected.
 - **What:** you flag individual changed lines. Each removed line is paired with the most similar added line next to it (its "after"). Flagging either half of a pair counts for both. A lesson may list either half, or both.
 - **Why:** reviewers think in edits ("this change was not asked for"), but an unwanted edit often sits right next to a wanted one, so grouping whole runs of changes would force you to flag wanted lines too.
 - **Rejected:** exact line matching (two lesson authors listed pairs differently, so the same mistake was graded differently); grouping by runs of changes (too coarse, see above).
+
+## 30. Leitner boxes, in calendar days
+- **What:** five boxes, waiting 1, 3, 7, 14 and 30 days. A right answer moves a card up a box; a wrong one sends it back to box 1, due tomorrow. Graded exercises join review when first answered in a lesson; each lesson with a recap adds one recall card when you finish it. Today shows up to ten due cards. "5-minute review" takes the first five.
+- **Why:** simple enough to explain in one sentence, and it is what the brief asked for. Days rather than timestamps, so "tomorrow" means tomorrow in your own time zone.
+- **Rejected:** SM-2 style ease factors (more to explain, little gain at this scale).
+
+## 31. Practice time is counted in 15-second ticks
+- **What:** every 15 seconds, if the app is on screen, on a lesson, review or the Scratchpad, and you have touched it in the last minute, 15 seconds are added to today.
+- **Why:** menus and an idle phone left open do not count. The streak needs 5 minutes a day; one missed day per week is forgiven; a second miss within a week ends it.
+
+## 32. Progress version 3
+- **What:** adds review cards, activity per day, the bug journal, Apply task notes, the self-test, settings and the last backup date. Version 2 data is upgraded with every answered exercise put into review, due today, so review is useful from the first day after the update.
+
+## 33. Backups are plain JSON files
+- **What:** Export downloads `code-literacy-backup-<date>.json` with progress and the Scratchpad. Import checks the file is really a backup, upgrades old versions, asks before replacing anything, and keeps a safety copy of the replaced progress on the device. A gentle reminder appears if there is progress and no backup in 30 days.
+- **Why:** there is no server, and iOS can clear website storage after a period without use. A file you can see and keep is the simplest thing that works.
+
+## 34. Settings live with progress
+- **What:** theme (follow the phone, light or dark) and haptics are stored in progress, so they are part of backups. Haptics use `navigator.vibrate`: one short tap for right, two for wrong. iPhones do not support it, and the Me tab says so.
