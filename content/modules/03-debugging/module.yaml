@@ -1,0 +1,49 @@
+id: debugging
+label: Module 3
+title: Debugging
+summary: Finding out what is true.
+intro: |
+  Debugging is a method: observe, guess a cause, test the guess. It is the same in every language, and it is the skill engineers respect most.
+
+  It also protects you from a common AI failure: pasting an error, accepting a patch, pasting the next error, until the tool is a stack of patches nobody understands.
+
+lessons:
+  - 01-read-the-traceback.md
+  - 02-common-errors.md
+  - 03-three-bugs.md
+  - 04-the-method.md
+  - 05-looking-inside.md
+  - 06-try-except.md
+  - 07-debugging-with-ai.md
+
+check:
+  - "Any `except Exception` or bare `except:`? What failure is it hiding?"
+  - "Does a \"fix\" address the cause, or does it make the symptom stop appearing?"
+  - "Did the fix change behaviour somewhere you did not ask about?"
+  - "When something fails, does the message say which item and why?"
+  - "Can you now explain the bug in one sentence? If not, it is not finished."
+
+bridge: |
+  C# and C++ have two rounds of errors. Compile errors appear before the program runs: wrong types, missing names, typos. They are free bug-finding. Runtime errors work like Python's, with a stack trace you read the same way.
+
+  C#'s `NullReferenceException` is Python's "NoneType has no attribute": something was null and you used it. `try { } catch (KeyNotFoundException e) { }` is the same shape as try/except.
+
+  | Python | C# | C++ |
+  |---|---|---|
+  | `AttributeError: 'NoneType'...` | `NullReferenceException` | often a crash, no message |
+  | `KeyError` | `KeyNotFoundException` | `std::out_of_range` (from `.at()`) |
+  | `IndexError` | `ArgumentOutOfRangeException` (from a `List`) | `std::out_of_range` (from `.at()`) |
+  | `try` / `except KeyError as e:` | `try` / `catch (KeyNotFoundException e)` | `try` / `catch (const std::out_of_range& e)` |
+
+  C++ can fail without any message when memory is misused, which is why the debugger is essential there. The method in lesson 4 does not change at all.
+
+apply:
+  - id: debugging-apply-blender
+    tier: In Blender
+    text: "The next time a script fails, set a ten-minute timer and work on it alone. Write the cause in one sentence before asking for help, then see whether you were right."
+  - id: debugging-apply-pipeline
+    tier: Pipeline
+    text: "Set up the VS Code debugger for a standalone Python script. Step through a loop and watch one variable change on each pass."
+  - id: debugging-apply-beyond
+    tier: Beyond games
+    text: "Start a bug journal: symptom, cause, how you found it. Ten entries. Patterns will appear, and it becomes interview material."
