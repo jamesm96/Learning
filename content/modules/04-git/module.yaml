@@ -1,0 +1,57 @@
+id: git
+label: Module 4
+title: Git
+summary: Undo, history and review.
+intro: |
+  Git records snapshots of a project so you can see what changed, go back, and try things safely. Every software team in every industry uses it.
+
+  For you it has a third job. When AI writes most of the code, the diff Git shows is where you find out what it really did, including the changes you never asked for. This module trains that review, and the undo commands that let you say no.
+
+lessons:
+  - 01-the-mental-model.md
+  - 02-the-daily-loop.md
+  - 03-reading-a-diff.md
+  - 04-branches-and-undo.md
+  - 05-what-stays-out.md
+  - 06-working-with-others.md
+
+check:
+  - "Did you commit before the session, so there is a clean point to return to?"
+  - "Have you read the whole diff, including files you did not expect to change?"
+  - "Any changed comparison, default value or deleted check that was not part of the task?"
+  - "Any key, token or personal path in the changes?"
+  - "Is the agent about to run a destructive command (`reset --hard`, a forced push, deleting branches)?"
+
+bridge: |
+  Git is the same for every language. What changes is the `.gitignore`: Unity projects ignore `Library/` and `Temp/`, Unreal projects ignore `Binaries/`, `Intermediate/`, `Saved/` and `DerivedDataCache/`, and C++ projects ignore their build folders. GitHub publishes ready-made ignore files for each.
+
+  The tools differ more than the ideas. Visual Studio and Rider both have Git built in, with a side-by-side diff view and buttons for staging, committing and switching branches. Many game studios keep code and assets in Perforce, often reviewed in Helix Swarm, while other teams use Git with pull requests on GitHub or GitLab.
+
+  | Git | Perforce |
+  |---|---|
+  | Commit (local) | Submit (goes to the server) |
+  | Staging | Pending changelist |
+  | `git stash` | Shelve |
+  | Branch | Stream or branch |
+  | Pull request | Review in Swarm |
+
+  Reading a diff is the same skill everywhere. A `>` that became `>=` looks the same in C#, C++ or Python.
+
+apply:
+  - id: git-apply-blender
+    tier: In Blender
+    text: "Put one of your add-ons under Git with a `.gitignore`. Make five commits over a week, each one idea with a clear message."
+  - id: git-apply-pipeline
+    tier: Pipeline
+    text: "For your next Claude Code session: commit first, work on a branch, read the full diff afterwards, and undo at least one change you did not ask for."
+  - id: git-apply-beyond
+    tier: Beyond games
+    text: "Publish one small, self-contained tool to GitHub with a README covering what it does, why, and how to run it."
+
+prompts:
+  - title: "Explain a diff line by line"
+    text: |
+      Here is a diff and the task it was meant to do. Go through it hunk by hunk. For each changed line, say what behaviour it changes and whether the task needed it. List separately every change the task did not ask for, including changed comparisons, defaults, exception handling, renamed keys, deleted checks, hard-coded paths and any keys or tokens. Do not rewrite anything.
+  - title: "Keep the change minimal"
+    text: |
+      Make only the change I describe below. Do not refactor, rename, reformat or tidy anything else, even if you think it would help; list those ideas at the end instead. Do not run git reset, git push --force or any command that deletes branches or uncommitted work. When you finish, show me the full diff.
