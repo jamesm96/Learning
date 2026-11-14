@@ -21,7 +21,8 @@ function courseWith(steps: Step[]): Course {
   return {
     title: "Test",
     planned: [],
-    modules: [{ id: "m", label: "M", title: "M", summary: "", checkHtml: [], apply: [], lessons: [{ id: "l", title: "L", minutes: 1, steps }] }],
+    files: {},
+    modules: [{ id: "m", label: "M", title: "M", summary: "", checkHtml: [], apply: [], prompts: [], lessons: [{ id: "l", title: "L", minutes: 1, steps }] }],
   };
 }
 

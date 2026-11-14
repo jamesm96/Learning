@@ -34,7 +34,11 @@ export function loadCourse(read: ReadContentFile): Course {
   if (problems.length > 0) {
     throw new ContentError(`Content has ${problems.length} problem(s):\n\n${problems.join("\n\n")}`);
   }
-  return { title: courseData.data.title, modules, planned };
+  const files: Record<string, string> = {};
+  for (const name of courseData.data.files) {
+    files[name] = read(`files/${name}`).replace(/\r\n/g, "\n");
+  }
+  return { title: courseData.data.title, files, modules, planned };
 }
 
 /** Load one module folder. Problems are added to the list rather than thrown, so all are reported at once. */
@@ -66,6 +70,7 @@ function loadModule(folder: string, read: ReadContentFile, problems: string[]): 
     checkHtml: (source.check ?? []).map(inlineMarkdownToHtml),
     bridgeHtml: source.bridge === undefined ? undefined : markdownToHtml(source.bridge),
     apply: (source.apply ?? []).map((task) => ({ id: task.id, tier: task.tier, html: inlineMarkdownToHtml(task.text) })),
+    prompts: source.prompts ?? [],
   };
 }
 

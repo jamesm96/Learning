@@ -17,6 +17,9 @@ export function StepView({ step, onAnswer }: StepViewProps) {
   if (step.kind === "read") {
     return <Html html={step.html} />;
   }
+  if (step.kind === "explain") {
+    return <Html html={step.modelHtml} />; // replaced by the explain-it-back component later in this phase
+  }
   return (
     <>
       {step.introHtml && <Html html={step.introHtml} />}
