@@ -2,7 +2,7 @@
 // Pure functions only: each takes the old progress and returns a new one.
 // Saving to the device lives in storage.ts.
 
-import type { Course, Module } from "../content/schema";
+import type { Course, Lesson, Module } from "../content/schema";
 
 /** Bump this when the stored shape changes, and add a step to migrate(). */
 export const PROGRESS_VERSION = 1;
@@ -69,6 +69,20 @@ export function lessonState(progress: Progress, lessonId: string): LessonState {
 export function moduleCounts(progress: Progress, module: Module): { done: number; total: number } {
   const done = module.lessons.filter((lesson) => lessonState(progress, lesson.id) === "done").length;
   return { done, total: module.lessons.length };
+}
+
+/** How many of a lesson's exercises were right first time, out of those answered. */
+export function lessonScore(progress: Progress, lesson: Lesson): { right: number; answered: number } {
+  let right = 0;
+  let answered = 0;
+  for (const step of lesson.steps) {
+    if (step.kind !== "exercise") continue;
+    const record = progress.answers[step.exercise.id];
+    if (!record) continue;
+    answered += 1;
+    if (record.firstTryCorrect) right += 1;
+  }
+  return { right, answered };
 }
 
 export interface NextStop {

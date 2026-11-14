@@ -3,6 +3,7 @@ import type { Course, Lesson } from "../content/schema";
 import {
   completeLesson,
   emptyProgress,
+  lessonScore,
   lessonState,
   migrate,
   moduleCounts,
@@ -84,6 +85,26 @@ describe("lesson progress", () => {
   it("counts finished lessons in a module", () => {
     const progress = completeLesson(emptyProgress(), "data-02", monday);
     expect(moduleCounts(progress, course.modules[1]!)).toEqual({ done: 1, total: 2 });
+  });
+});
+
+describe("lessonScore", () => {
+  const quiz: Lesson = {
+    id: "quiz",
+    title: "Quiz",
+    minutes: 3,
+    steps: ["q-1", "q-2", "q-3"].map((id) => ({
+      kind: "exercise" as const,
+      introHtml: "",
+      exercise: { type: "predict" as const, id, code: "", output: "", explainHtml: "" },
+    })),
+  };
+
+  it("counts first-try answers only, among those answered", () => {
+    let progress = recordAnswer(emptyProgress(), "q-1", true, monday);
+    progress = recordAnswer(progress, "q-2", false, monday);
+    progress = recordAnswer(progress, "q-2", true, tuesday); // a retry does not change the first-try score
+    expect(lessonScore(progress, quiz)).toEqual({ right: 1, answered: 2 });
   });
 });
 
