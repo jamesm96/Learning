@@ -1,6 +1,7 @@
 import type { Module } from "../content/schema";
 import { Html } from "../components/Html";
 import { PromptCard } from "../components/PromptCard";
+import { ApplyTask } from "../components/ApplyTask";
 import { lessonState } from "../progress/progress";
 import { useProgress } from "../progress/store";
 import { lessonHash } from "../routes";
@@ -80,10 +81,7 @@ export function ModuleScreen({ module }: ModuleScreenProps) {
           <h2>Apply it, at your desk</h2>
           <ul class="apply-list">
             {module.apply.map((task) => (
-              <li key={task.id}>
-                <span class="apply-tier">{task.tier}</span>
-                <span dangerouslySetInnerHTML={{ __html: task.html }} />
-              </li>
+              <ApplyTask key={task.id} id={task.id} tier={task.tier} html={task.html} />
             ))}
           </ul>
         </section>

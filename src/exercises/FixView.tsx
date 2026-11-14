@@ -3,6 +3,9 @@ import type { FixExercise } from "../content/schema";
 import { shuffle } from "../grading/grading";
 import { Feedback } from "../components/Feedback";
 import { Html } from "../components/Html";
+import { BugForm } from "../components/BugForm";
+import { addBug } from "../progress/progress";
+import { updateProgress } from "../progress/store";
 import { CodeTask, type TaskOutcome } from "./CodeTask";
 
 interface FixViewProps {
@@ -15,6 +18,7 @@ export function FixView({ exercise, onAnswer }: FixViewProps) {
   const [outcome, setOutcome] = useState<TaskOutcome | null>(null);
   const [cause, setCause] = useState<string | null>(null);
   const options = useMemo(() => shuffle(exercise.cause.options), [exercise]);
+  const [logging, setLogging] = useState<"no" | "form" | "saved">("no");
   const causeRight = cause === exercise.cause.answer;
 
   const pickCause = (optionId: string) => {
@@ -58,6 +62,37 @@ export function FixView({ exercise, onAnswer }: FixViewProps) {
       )}
 
       {cause && <Feedback correct={causeRight} explainHtml={exercise.explainHtml} />}
+
+      {cause && logging === "no" && (
+        <button type="button" class="link-button" onClick={() => setLogging("form")}>
+          Log this bug
+        </button>
+      )}
+      {logging === "form" && (
+        <BugForm
+          initial={{
+            symptom: plainText(exercise.symptomHtml ?? ""),
+            cause: plainText(exercise.cause.options.find((option) => option.id === exercise.cause.answer)?.html ?? ""),
+            howFound: "",
+          }}
+          onCancel={() => setLogging("no")}
+          onSave={(draft) => {
+            const entry = { id: `bug-${Date.now().toString(36)}`, ...draft, createdAt: new Date().toISOString(), exerciseId: exercise.id };
+            updateProgress((p) => addBug(p, entry));
+            setLogging("saved");
+          }}
+        />
+      )}
+      {logging === "saved" && (
+        <p class="run-note" role="status">
+          Saved to your bug journal, on the Me tab.
+        </p>
+      )}
     </div>
   );
+}
+
+/** Turn trusted content HTML into plain text, for the journal. */
+function plainText(html: string): string {
+  return new DOMParser().parseFromString(html, "text/html").body.textContent ?? "";
 }
